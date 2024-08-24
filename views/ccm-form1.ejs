@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Al Rahim Textile - Dashboard Login</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="css/app.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="bundles/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
+  <!-- Bootstrap CSS for Multi-Step Form -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('img/alrahim.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #f9f9f9;
+    }
+
+    .step {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step-item {
+      text-align: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .step-item .step-icon {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 50%;
+      background-color: #ddd;
+      color: #fff;
+      margin-bottom: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .step-item .step-icon-active {
+      background-color: #402fd5;
+    }
+
+    .step-item::after {
+      content: '';
+      position: absolute;
+      top: 19px;
+      right: -50%;
+      width: 100%;
+      height: 2px;
+      background-color: #ddd;
+      z-index: -1;
+    }
+
+    .step-item:last-child::after {
+      display: none;
+    }
+
+    .step-item.active::after {
+      background-color: #402fd5;
+    }
+
+    .form-section button {
+      padding: 10px 20px;
+      background-color: #402fd5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background-color: #402fd5;
+    }
+
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+
+    .is-invalid::placeholder {
+      color: #dc3545 !important;
+    }
+
+    .is-invalid+.invalid-feedback {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="loader"></div>
+
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar sticky">
+        <div class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+          </ul>
+        </div>
+        <ul class="navbar-nav navbar-right">
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png" class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+            <div class="dropdown-menu dropdown-menu-right pullDown">
+              <div class="dropdown-title">Welcome <%= userData.Designation %></div>
+              <a class="dropdown-item has-icon">Name : <%= userData.Name %></a>
+              <a class="dropdown-item has-icon">Email: <%= userData.Email %></a>
+              <a class="dropdown-item has-icon">Contact: <%= userData.Contact %></a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="main-sidebar sidebar-style-2">
+      <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+          <a href="#">
+            <img alt="image" src="/img/al_rahim.jpg" class="header-logo" style="width: 70%; height: auto;" />
+          </a>
+        </div>
+        <ul class="sidebar-menu">
+          <li class="menu-header">Main</li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "QMS Team" || userData.Designation == "Marketing Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/ccm-form1" class="nav-link"><i data-feather="monitor"></i><span>CCM Form</span></a>
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
+          </li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/" class="menu-toggle nav-link has-dropdown"><i data-feather="pie-chart"></i><span>Admin Actions</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="/users-list">Users List</a></li>
+              <li><a class="nav-link" href="/products-list">Products List</a></li>
+            </ul>
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="mailto:arkham.workmail@gmail.com"><i data-feather="mail"></i><span>Report Bug</span></a>
+          </li>
+        </ul>
+      </aside>
+    </div>
+
+    <section class="section">
+      <form action="/submit-form" method="POST" class="needs-validation" novalidate="">
+        <div class="container mt-2">
+          <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
+              <div class="card card-primary" style="margin-top: 100px;">
+                <div class="card-header text-center">
+                  <h2>Al Rahim Textile</h2>
+
+                </div>
+                <ul id="stepProgress" class="step">
+                  <li class="step-item active">
+                    <span class="step-icon step-icon-active">1</span>
+                    <div class="step-content">Customer Details</div>
+                  </li>
+                  <li class="step-item">
+                    <span class="step-icon">2</span>
+                    <div class="step-content">Product Details</div>
+                  </li>
+                  <li class="step-item">
+                    <span class="step-icon">3</span>
+                    <div class="step-content">Complaint Details</div>
+                  </li>
+                </ul>
+                <div class="card-body">
+                  <div class="form-container">
+                    <!-- <ul id="stepProgress" class="step">
+                      <li class="step-item active">
+                        <span class="step-icon step-icon-active">1</span>
+                        <div class="step-content">Customer Details</div>
+                      </li>
+                      <li class="step-item">
+                        <span class="step-icon">2</span>
+                        <div class="step-content">Product Details</div>
+                      </li>
+                      <li class="step-item">
+                        <span class="step-icon">3</span>
+                        <div class="step-content">Complaint Details</div>
+                      </li>
+                    </ul> -->
+
+                    <!-- Step 1: Customer Details -->
+                    <div id="step1" class="form-section active">
+                      <h2 class="mb-4">Customer Details</h2>
+                      <div class="form-group">
+                        <label for="CustomerName">Customer Name</label>
+                        <input type="text" class="form-control" name="CustomerName" id="CustomerName" placeholder="Enter customer name" required>
+                        <div class="invalid-feedback">Please enter customer name.</div>
+                      </div>
+                      <div class="form-group">
+                        <label for="NatureOfComplaint[]">Select Nature(s) of Complaint</label>
+                        <select class="form-control select2" multiple name="NatureOfComplaint[]" id="NatureOfComplaint[]" required>
+                          <% CCMFieldsDataReq.forEach(function(item) { %>
+                          <% if (item.NOCDropdown) { %>
+                          <optgroup label="<%= item.NOCDropdown %>">
+                            <% if (item.NOCDropdownSubType) { %>
+                            <% item.NOCDropdownSubType.split(',').forEach(function(option) { %>
+                            <option value="<%= option.trim() %>">
+                              <%= option.trim() %>
+                            </option>
+                            <% }); %>
+                            <% } %>
+                          </optgroup>
+                          <% } %>
+                          <% }); %>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="NatureOfComplaintOthers">Other Nature(s) of Complaints</label>
+                        <input type="text" placeholder="Add comma-separated values without space" class="form-control" name="NatureOfComplaintOthers" id="NatureOfComplaintOthers" multiple>
+                      </div>
+                      <div class="form-group">
+                        <label for="PONumber">PO#</label>
+                        <input type="text" class="form-control" required="" name="PONumber" id="PONumber">
+                      </div>
+                      <div class="form-group">
+                        <label for="SOSNumber">SOS#</label>
+                        <input type="text" class="form-control" required="" name="SOSNumber" id="SOSNumber">
+                      </div>
+
+                      <div class="d-flex justify-content-end align-items-center mt-3">
+                        <button type="button" onclick="nextStep('step1')" class="btn btn-primary">Next</button>
+                      </div>
+
+                    </div>
+
+                    <!-- Step 2: Product Details -->
+                    <div id="step2" class="form-section">
+                      <h2 class="mb-4">Product Details</h2>
+                      <div class="collapse show" id="product-details-card">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="BrandName">Brand Name</label>
+                              <select class="form-control select2" name="BrandName" id="BrandName" style="width: 250px !important;">
+                                <% for (let i = 0; i < CCMFieldsDataReq.length; i++) { %>
+                                <% const brandName = CCMFieldsDataReq[i].BrandName; %>
+                                <% if (brandName) { %>
+                                <option>
+                                  <%= brandName %>
+                                </option>
+                                <% } %>
+                                <% } %>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="Product">Product</label>
+                              <select class="form-control select2" name="Product" id="Product" style="width: 250px !important;">
+                                <% for (let i = 0; i < CCMFieldsDataReq.length; i++) { %>
+                                <% const product = CCMFieldsDataReq[i].Product; %>
+                                <% if (product) { %>
+                                <option>
+                                  <%= product %>
+                                </option>
+                                <% } %>
+                                <% } %>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="Article">Article</label>
+                              <select class="form-control select2" name="Article" id="Article" style="width: 250px !important;">
+                                <% for (let i = 0; i < CCMFieldsDataReq.length; i++) { %>
+                                <% const article = CCMFieldsDataReq[i].Article; %>
+                                <% if (article) { %>
+                                <option>
+                                  <%= article %>
+                                </option>
+                                <% } %>
+                                <% } %>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="ProductID">Product ID</label>
+                              <input type="text" class="form-control" required name="ProductID" id="ProductID" placeholder="Enter 12-digit Product ID" pattern="\d{12}">
+                              <div class="invalid-feedback">
+                                Please enter a 12-digit Product ID.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="Design">Design</label>
+                              <input type="text" class="form-control" required name="Design" id="Design">
+                              <div class="invalid-feedback">
+                                Enter the design.
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="SizeValue">Size Value</label>
+                              <input type="text" class="form-control" required name="SizeValue" id="SizeValue" placeholder="Eg: 12x12" pattern="\d+x\d+">
+                              <div class="invalid-feedback">
+                                Enter the size value in the correct format.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="SizeUnit">Size Unit</label>
+                              <select class="form-control select2" name="SizeUnit" id="SizeUnit" style="width: 250px !important;">
+                                <option>In</option>
+                                <option>Cm</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="Color">Color</label>
+                              <input type="text" class="form-control" required name="Color" id="Color">
+                              <div class="invalid-feedback">
+                                Please enter a color.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-end align-items-center mt-3">
+                        <button type="button" onclick="nextStep('step2')" class="btn btn-primary ">Next</button>
+                      </div>
+                    </div>
+
+                    <!-- Step 3: Complaint Details -->
+                     
+                    <div id="step3" class="form-section">
+                      <h2 class="mb-4">Complaint Details</h2>
+
+                      <div class="form-group">
+                        <label for="complaint_details">Complaint Details</label>
+                        <textarea class="form-control" id="complaint_details" rows="6" placeholder="Enter complaint details" required></textarea>
+                        <div class="invalid-feedback">Please enter complaint details.</div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="ComplaintDate">Complaint Date</label>
+                        <input type="date" class="form-control" name="ComplaintDate" id="ComplaintDate" required>
+                        <div class="invalid-feedback">Please select a date.</div>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Upload respective files</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="uploadFiles" name="uploadFiles" required>
+                          <label class="custom-file-label" for="uploadFiles">Upload</label>
+                        </div>
+                      </div>
+
+                      <div class="d-flex justify-content-between align-items-center mt-3">
+                        <button type="submit" id="submitBtn" class="btn btn-success" onclick="validateForm()">Submit</button>
+                        <a href="/generate-pdf"><button type="button" id="downloadBtn" class="btn btn-success" disabled style="display: none;">Download Pdf</button></a>
+                        <a href="/ccm-form1"><button type="button" id="ccmFoamBtn" class="btn btn-success" disabled style="display: none;">Go to CCM-FOAM</button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </form>
+    </section>
+    <script>
+      // Get references to the buttons
+      const submitBtn = document.getElementById('submitBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const ccmFoamBtn = document.getElementById('ccmFoamBtn');
+
+      // Get references to the form fields
+      const complaintDetails = document.getElementById('complaint_details');
+      const complaintDate = document.getElementById('ComplaintDate');
+      const uploadFiles = document.getElementById('uploadFiles');
+
+      // Function to validate the form
+      function validateForm() {
+        const isComplaintDetailsFilled = complaintDetails.value.trim() !== '';
+        const isComplaintDateFilled = complaintDate.value.trim() !== '';
+        const isUploadFilesFilled = uploadFiles.files.length > 0;
+
+        if (isComplaintDetailsFilled && isComplaintDateFilled && isUploadFilesFilled) {
+          // Enable the other buttons if all fields are filled
+          downloadBtn.disabled = false;
+          downloadBtn.style.display = 'block';
+          ccmFoamBtn.disabled = false;
+          ccmFoamBtn.style.display = 'block';
+
+          // Optionally, hide the Submit button after it's clicked
+          submitBtn.style.display = 'none';
+        } else {
+          // Show an alert if not all fields are filled
+          alert('Please fill in all fields before submitting.');
+        }
+      }
+    </script>
+    
+    <!-- General JS Scripts -->
+    <script src="js/app.min.js"></script>
+    <script src="bundles/jquery-ui/jquery-ui.min.js"></script>
+    <!-- JS Libraries -->
+    <script src="bundles/select2/dist/js/select2.full.min.js"></script>
+    <!-- Page Specific JS File -->
+    <script src="js/page/forms-advanced-forms.js"></script>
+    <!-- Template JS File -->
+    <script src="js/scripts.js"></script>
+    <script src="js/custom.js"></script>
+    <!-- Bootstrap JS for Multi-Step Form -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.querySelectorAll('input, textarea').forEach((input) => {
+        input.addEventListener('input', function() {
+          const currentSection = input.closest('.form-section');
+          const stepIndex = [...document.querySelectorAll('.form-section')].indexOf(currentSection);
+          const stepItem = document.querySelectorAll('.step-item')[stepIndex];
+          const stepIcon = stepItem.querySelector('.step-icon');
+
+          const allFilled = [...currentSection.querySelectorAll('input, textarea')].every(field => field.checkValidity());
+
+          if (allFilled) {
+            stepIcon.classList.add('filled'); // Add filled class to change color
+          } else {
+            stepIcon.classList.remove('filled'); // Remove filled class if not all fields are valid
+          }
+        });
+      });
+
+      function nextStep(currentStepId) {
+        const currentSection = document.getElementById(currentStepId);
+        const nextSection = currentSection.nextElementSibling;
+
+        const inputs = currentSection.querySelectorAll('input, textarea');
+        let valid = true;
+
+        inputs.forEach((input) => {
+          if (!input.checkValidity()) {
+            input.classList.add('is-invalid');
+            valid = false;
+          } else {
+            input.classList.remove('is-invalid');
+          }
+        });
+
+        if (valid) {
+          currentSection.classList.remove('active');
+          nextSection.classList.add('active');
+
+          const stepItems = document.querySelectorAll('.step-item');
+          const currentIndex = [...document.querySelectorAll('.form-section')].indexOf(currentSection);
+
+          stepItems.forEach((item, index) => {
+            if (index <= currentIndex) {
+              item.classList.add('active');
+              item.querySelector('.step-icon').classList.add('step-icon-active');
+            } else {
+              item.classList.remove('active');
+              item.querySelector('.step-icon').classList.remove('step-icon-active');
+            }
+          });
+
+          const nextStep = stepItems[currentIndex + 1];
+          if (nextStep) {
+            nextStep.querySelector('.step-icon').classList.add('step-icon-active');
+          }
+        }
+      }
+
+      document.getElementById('nextBtn').addEventListener('click', () => nextStep('currentStepId'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Al Rahim Textile - Dashboard Login</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="css/app.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="bundles/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
+
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar sticky">
+        <div class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
+              
+            </li>
+          </ul>
+        </div>
+        <ul class="navbar-nav navbar-right">
+          
+          
+
+          <!--Notifications-->
+
+
+          <li class="dropdown"><a href="#" data-toggle="dropdown"
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
+                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+            <div class="dropdown-menu dropdown-menu-right pullDown">
+              <div class="dropdown-title">Welcome <%= userData.Designation %></div>
+              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Email:  <%= userData.Email %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Contact:  <%= userData.Contact %>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="main-sidebar sidebar-style-2">
+
+      <aside id="sidebar-wrapper">
+
+        <div class="sidebar-brand">
+
+          <a href="/">
+            <img alt="image" src="/img/al_rahim.jpg" class="header-logo" style="width: 70%; height: auto;" />
+          </a>
+
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+          <li class="menu-header">Main</li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "QMS Team" || userData.Designation == "Marketing Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/ccm-form1" class="nav-link"><i data-feather="monitor"></i><span>CCM Form</span></a>
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
+          </li>
+          
+          <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
+            <li class="dropdown">
+              <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+            </li>
+            <% } %>
+  
+          <% if(userData.Designation == "Admin") { %>
+
+          <li class="dropdown">
+            <a href="/" class="menu-toggle nav-link has-dropdown"><i data-feather="pie-chart"></i><span>Admin Actions</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="/users-list">Users List</a></li>
+              <li><a class="nav-link" href="/products-list">Products List</a></li>
+            </ul>
+
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="mailto:arkham.workmail@gmail.com"><i data-feather="mail"></i><span>Report Bug</span></a>
+          </li>
+          <!-- <li class="dropdown">
+            <a href="/logout" class="nav-link"><i data-feather="log-out"></i><span>Logout</span></a>
+          </li> -->
+
+
+
+        </ul>
+      </aside>
+    </div>
+
+    <section class="section">
+      <div class="container mt-2">
+        <div class="row">
+          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-8 offset-xl-2">
+
+            <div class="card card-primary" style="margin-top: 80px;">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Users List</h4>
+                <a href="#" class="btn btn-icon btn-primary"><i class="fas fa-plus-circle"></i></a>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-md">
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Contact</th>
+                      <th>Designation</th>
+                      <th>Remove User</th>
+                    </tr>
+                    <% for (let i=0; i < CCMUserDataReq.length; i++) { %>
+                    <tr>
+                      <td><%= i+1 %></td>
+                      <td><%= CCMUserDataReq[i].Name %></td>
+                      <td><%= CCMUserDataReq[i].Email %></td>
+                      <td><%= CCMUserDataReq[i].Contact %></td>
+                      <td>
+                        <div class="badge badge-success"><%= CCMUserDataReq[i].Designation %></div>
+                      </td>
+                      <td>
+                        <form method="POST" action="/removeUser" class="needs-validation" novalidate="">
+                          <input type="hidden" name="userId" value="<%= CCMUserDataReq[i].id %>">
+                          <div class="form-group">
+                            <button type="submit" class="btn btn-danger" tabindex="4">Remove</button>
+                          </div>
+                        </form>
+                      </td>
+                    </tr>
+                    <% } %>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addUserForm">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" name="Name" id="Name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" name="Email" id="Email">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" class="form-control" name="Password" id="Password">
+            </div>
+            <div class="form-group">
+              <label>Contact</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fas fa-phone"></i>
+                  </div>
+                </div>
+                <input type="tel" class="form-control phone-number" name="Contact" id="Contact">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Designation</label>
+              <select class="form-control" name="Designation" id="Designation">
+                <option value="Admin">Admin</option>
+                <option value="Marketing Team">Marketing Team</option>
+                <option value="Production Team">Production Team</option>
+                <option value="QA Team">QA Team</option>
+                <option value="QMS Team">QMS Team</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveUserBtn">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <!-- General JS Scripts -->
+  <script src="js/app.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="bundles/select2/dist/js/select2.full.min.js"></script>
+  <script src="bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <!-- Page Specific JS File -->
+  <!-- Template JS File -->
+  <script src="js/scripts.js"></script>
+  <!-- Custom JS File -->
+  <script src="js/custom.js"></script>
+  <script src="bundles/sweetalert/sweetalert.min.js"></script>
+  <script src="js/page/sweetalert.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const addUserBtn = document.querySelector('.btn-primary');
+      addUserBtn.addEventListener('click', function() {
+        $('#addUserModal').modal('show');
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      const saveUserBtn = document.getElementById('saveUserBtn');
+      const addUserForm = document.getElementById('addUserForm');
+
+      saveUserBtn.addEventListener('click', function() {
+        // Serialize the form data
+        const formData = new FormData(addUserForm);
+
+        // Send a POST request to the server with the form data
+        fetch('/add-user', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to add user');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert(data.message); // Show success message
+            $('#addUserModal').modal('hide'); // Hide the modal
+          })
+          .catch(error => {
+            console.error('Error adding user:', error);
+            alert('Failed to add user');
+          });
+      });
+    });
+  </script>
+
+</body>
+
+</html>

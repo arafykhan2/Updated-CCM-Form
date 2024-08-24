@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Al Rahim Textile - Dashboard Login</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="/css/app.min.css">
+  <link rel="stylesheet" href="/bundles/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="/bundles/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="/css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
+
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar sticky">
+        <div class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
+              
+            </li>
+          </ul>
+        </div>
+        <ul class="navbar-nav navbar-right">
+          
+          
+
+          <!--Notifications-->
+
+
+          <li class="dropdown"><a href="#" data-toggle="dropdown"
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
+                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+            <div class="dropdown-menu dropdown-menu-right pullDown">
+              <div class="dropdown-title">Welcome <%= userData.Designation %></div>
+              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Email:  <%= userData.Email %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Contact:  <%= userData.Contact %>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="main-sidebar sidebar-style-2">
+
+      <aside id="sidebar-wrapper">
+
+        <div class="sidebar-brand">
+
+          <a href="/">
+            <img alt="image" src="/img/al_rahim.jpg" class="header-logo" style="width: 70%; height: auto;" />
+          </a>
+
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+          <li class="menu-header">Main</li>
+
+          <li class="dropdown">
+            <a href="/ccm-form1" class="nav-link"><i data-feather="monitor"></i><span>CCM Form</span></a>
+          </li>
+
+          <li class="dropdown">
+            <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
+          </li>
+          
+          <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
+            <li class="dropdown">
+              <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+            </li>
+            <% } %>
+  
+          <% if(userData.Designation == "Admin") { %>
+
+          <li class="dropdown">
+            <a href="/" class="menu-toggle nav-link has-dropdown"><i data-feather="pie-chart"></i><span>Admin Actions</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="/users-list">Users List</a></li>
+              <li><a class="nav-link" href="/products-list">Products List</a></li>
+            </ul>
+
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="mailto:arkham.workmail@gmail.com"><i data-feather="mail"></i><span>Report Bug</span></a>
+          </li>
+          <!-- <li class="dropdown">
+            <a href="/logout" class="nav-link"><i data-feather="log-out"></i><span>Logout</span></a>
+          </li> -->
+
+
+
+        </ul>
+      </aside>
+    </div>
+
+
+    <section class="section">
+      <form action="/submit-form" method="POST" class="needs-validation" novalidate="">
+
+        <div class="container mt-2">
+          <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
+
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h4>Al Rahim Textile - CCM Form</h4>
+                </div>
+                <div class="card-body">
+                  <div class="py-1">
+                    <p class="clearfix">
+                      <span class="float-left">
+                        <strong>User Details</strong>
+                      </span>
+                    </p>
+                    <p class="clearfix">
+                      <span class="float-left">
+                        Name
+                      </span>
+                      <span class="float-right text-muted">
+                        <%= userData.Name %>
+                      </span>
+                    </p>
+                    <p class="clearfix">
+                      <span class="float-left">
+                        Designation
+                      </span>
+                      <span class="float-right text-muted">
+                        <%= userData.Designation %>
+                      </span>
+                    </p>
+                    <p class="clearfix">
+                      <span class="float-left">
+                        Email
+                      </span>
+                      <span class="float-right text-muted">
+                        <%= userData.Email %>
+                      </span>
+                    </p>
+                    <p class="clearfix">
+                      <span class="float-left">
+                        Contact
+                      </span>
+                      <span class="float-right text-muted">
+                        <%= userData.Contact %>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-2">
+          <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
+              <div class="card card-primary">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4>Customer Details</h4>
+                  <a data-collapse="#customer-details-card" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
+                </div>
+
+                <div class="collapse show" id="customer-details-card">
+                  <div class="card-body">
+
+                    <div class="form-group">
+                      <label>Customer Name</label>
+                      <input type="text" class="form-control" disabled value="<%= CCMFormDataReq[entryID-1].CustomerName %>">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Select Nature(s) of Complaint</label>
+                      <select class="form-control select2" multiple name="NatureOfComplaint[]" disabled>
+                        <optgroup label="Quality">
+                          <option value="Workmanship" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Workmanship') ? 'selected' : '' %>>Workmanship</option>
+                          <option value="Measurement" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Measurement') ? 'selected' : '' %>>Measurement</option>
+                          <option value="Weight" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Weight') ? 'selected' : '' %>>Weight</option>
+                          <option value="Packaging" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Packaging') ? 'selected' : '' %>>Packaging</option>
+                          <option value="Safety & regulatory" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Safety & regulatory') ? 'selected' : '' %>>Safety & regulatory</option>
+                        </optgroup>
+                        <optgroup label="Testing">
+                          <option value="Performance failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Performance failure') ? 'selected' : '' %>>Performance failure</option>
+                          <option value="Durability failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Durability failure') ? 'selected' : '' %>>Durability failure</option>
+                          <option value="Aesthetics failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Aesthetics failure') ? 'selected' : '' %>>Aesthetics failure</option>
+                          <option value="MRSL non compliant" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('MRSL non compliant') ? 'selected' : '' %>>MRSL non compliant</option>
+                        </optgroup>
+                        <optgroup label="Delivery">
+                          <option value="Late shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Late shipment') ? 'selected' : '' %>>Late shipment</option>
+                          <option value="Wrong shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Wrong shipment') ? 'selected' : '' %>>Wrong shipment</option>
+                          <option value="Short shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Short shipment') ? 'selected' : '' %>>Short shipment</option>
+                          <option value="Mildew & mold" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Mildew & mold') ? 'selected' : '' %>>Mildew & mold</option>
+                          <option value="Damages" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Damages') ? 'selected' : '' %>>Damages</option>
+                          <option value="Others" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Others') ? 'selected' : '' %>>Others</option>
+                        </optgroup>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Other Nature(s) of Complaints</label>
+                      <input type="text" class="form-control" disabled value="<%= CCMFormDataReq[entryID-1].NatureOfComplaintOthers %>">
+                    </div>
+
+
+                    <div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>PO#</label>
+                            <input type="text" class="form-control" disabled value="<%= CCMFormDataReq[entryID-1].PONumber %>">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label>SOS#</label>
+                            <input type="text" class="form-control" disabled value="<%= CCMFormDataReq[entryID-1].SOSNumber %>">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-2">
+          <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
+              <div class="card card-primary">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4>Product Details</h4>
+                  <a data-collapse="#product-details-card" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
+                </div>
+
+                <div class="collapse show" id="product-details-card">
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label>Brand Name</label>
+                      <select class="form-control select2" disabled>
+                        <option <%= (CCMFormDataReq[entryID-1].BrandName === 'Threshold') ? 'selected' : '' %>>Threshold</option>
+                        <option <%= (CCMFormDataReq[entryID-1].BrandName === 'Room Essential') ? 'selected' : '' %>>Room Essential</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Product</label>
+                      <select class="form-control select2" disabled>
+                        <option <%= (CCMFormDataReq[entryID-1].Product === 'Solid towel') ? 'selected' : '' %>>Solid towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Product === 'Yarn Dyed towel') ? 'selected' : '' %>>Yarn Dyed towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Printed towel') ? 'selected' : '' %>>Printed towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'White') ? 'selected' : '' %>>White</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Article</label>
+                      <select class="form-control select2" disabled>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Beach towel') ? 'selected' : '' %>>Beach towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Bath towel') ? 'selected' : '' %>>Bath towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Beach towel') ? 'selected' : '' %>>Beach towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Bath towel') ? 'selected' : '' %>>Bath towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Hand towel') ? 'selected' : '' %>>Hand towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Guest towel') ? 'selected' : '' %>>Guest towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Kitchen towel') ? 'selected' : '' %>>Kitchen towel</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Wash Cloth') ? 'selected' : '' %>>Wash Cloth</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Bath Matt') ? 'selected' : '' %>>Bath Matt</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Bathrobe') ? 'selected' : '' %>>Bathrobe</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Gloves') ? 'selected' : '' %>>Gloves</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Poncho') ? 'selected' : '' %>>Poncho</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Turban') ? 'selected' : '' %>>Turban</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Bath Sheet') ? 'selected' : '' %>>Bath Sheet</option>
+                        <option <%= (CCMFormDataReq[entryID-1].Article === 'Baby bib') ? 'selected' : '' %>>Baby bib</option>
+                      </select>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Product ID</label>
+                          <input type="text" class="form-control" value="<%= CCMFormDataReq[entryID-1].ProductID %>" disabled>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Design</label>
+                          <input type="text" class="form-control" value="<%= CCMFormDataReq[entryID-1].Design %>" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Size Value</label>
+                          <input type="text" class="form-control" value="<%= CCMFormDataReq[entryID-1].SizeValue %>" disabled>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Size Unit</label>
+                          <select class="form-control select2" disabled>
+                            <option <%= (CCMFormDataReq[entryID-1].SizeUnit === 'In') ? 'selected' : '' %>>In</option>
+                            <option <%= (CCMFormDataReq[entryID-1].SizeUnit === 'Cm') ? 'selected' : '' %>>Cm</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label>Color</label>
+                          <input type="text" class="form-control" value="<%= CCMFormDataReq[entryID-1].Color %>" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="container mt-2">
+          <div class="row">
+            <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3">
+              <div class="card card-primary">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h4>Complaint Details</h4>
+                  <a data-collapse="#complaint-details-card" class="btn btn-icon btn-info" href="#"><i class="fas fa-minus"></i></a>
+                </div>
+
+                <div class="collapse show" id="complaint-details-card">
+                  <div class="card-body">
+
+                    <div class="form-group">
+                      <label>Complaint Description</label>
+                      <textarea class="form-control" disabled><%= CCMFormDataReq[entryID-1].ComplaintDetails %></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Complaint Date</label>
+                      <input type="date" class="form-control" value="<%= formattedComplaintDate %>" disabled>
+                    </div>
+
+
+
+                    <!-- <div class="form-group">
+                      <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                        Submit Data
+                      </button>
+                    </div> -->
+
+                  </div>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" name="Name" value="<%= CCMUserDataReq[0].Name %>">
+        <input type="hidden" name="Designation" value="<%= CCMUserDataReq[0].Designation %>">
+        <input type="hidden" name="Email" value="<%= CCMUserDataReq[0].Email %>">
+        <input type="hidden" name="Contact" value="<%= CCMUserDataReq[0].Contact %>">
+
+      </form>
+
+    </section>
+
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="/js/app.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="/bundles/select2/dist/js/select2.full.min.js"></script>
+  <script src="/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <!-- Page Specific JS File -->
+  <!-- Template JS File -->
+  <script src="/js/scripts.js"></script>
+  <!-- Custom JS File -->
+  <script src="/js/custom.js"></script>
+  <script src="/bundles/sweetalert/sweetalert.min.js"></script>
+  <script src="/js/page/sweetalert.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      // Initialize Select2 for the main dropdown
+      $('#mainDropdown').select2();
+
+      // Initialize Select2 for the additional dropdown
+      $('#additionalDropdownSelect').select2();
+
+      // Show/hide additional dropdown based on the selected option
+      $('#mainDropdown').on('change', function() {
+        var selectedValue = $(this).val();
+
+        // Hide the additional dropdown
+        $('#additionalDropdown').hide();
+
+        // If Option 3 is selected, show the additional dropdown
+        if (selectedValue === '1') {
+          $('#additionalDropdown').show();
+
+          // Populate options for the additional dropdown
+          // You can add your own options here
+          $('#additionalDropdownSelect').html(`
+            `);
+
+          // Trigger change event to update Select2
+          $('#additionalDropdownSelect').trigger('change');
+        } else if (selectedValue === '2') {
+          $('#additionalDropdown').show();
+
+          // Populate options for the additional dropdown
+          // You can add your own options here
+          $('#additionalDropdownSelect').html(`
+            `);
+
+          // Trigger change event to update Select2
+          $('#additionalDropdownSelect').trigger('change');
+        } else {
+          $('#additionalDropdown').show();
+
+          // Populate options for the additional dropdown
+          // You can add your own options here
+          $('#additionalDropdownSelect').html(`
+            `);
+
+          // Trigger change event to update Select2
+          $('#additionalDropdownSelect').trigger('change');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

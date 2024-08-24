@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  /* Style for the popup */
+  .arkham-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fdfdff;
+    /* Match with .bootstrap-tagsinput background-color */
+    border: 2px solid #e4e6fc;
+    /* Match with .bootstrap-tagsinput border-color */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    /* Match with .bootstrap-tagsinput box-shadow */
+    border-radius: 4px;
+    /* Match with .bootstrap-tagsinput border-radius */
+    z-index: 9999;
+    max-width: 100%;
+    /* Match with .bootstrap-tagsinput max-width */
+    cursor: text;
+    /* Match with .bootstrap-tagsinput cursor */
+  }
+
+  /* Style for the close button */
+  .arkham-popup .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+  }
+</style>
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Al Rahim Textile - Dashboard Login</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="/css/app.min.css">
+  <link rel="stylesheet" href="/bundles/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="/bundles/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
+
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar sticky">
+        <div class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
+              
+            </li>
+          </ul>
+        </div>
+        <ul class="navbar-nav navbar-right">
+          
+          
+
+          <!--Notifications-->
+
+
+          <li class="dropdown"><a href="#" data-toggle="dropdown"
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
+                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+            <div class="dropdown-menu dropdown-menu-right pullDown">
+              <div class="dropdown-title">Welcome <%= userData.Designation %></div>
+              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Email:  <%= userData.Email %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Contact:  <%= userData.Contact %>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="main-sidebar sidebar-style-2">
+
+      <aside id="sidebar-wrapper">
+
+        <div class="sidebar-brand">
+
+          <a href="/">
+            <img alt="image" src="/img/al_rahim.jpg" class="header-logo" style="width: 70%; height: auto;" />
+          </a>
+
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+          <li class="menu-header">Main</li>
+
+          <li class="dropdown">
+            <a href="/ccm-form1" class="nav-link"><i data-feather="monitor"></i><span>CCM Form</span></a>
+          </li>
+
+          <li class="dropdown">
+            <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
+          </li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "Admin") { %>
+
+          <li class="dropdown">
+            <a href="/" class="menu-toggle nav-link has-dropdown"><i data-feather="pie-chart"></i><span>Admin Actions</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="/users-list">Users List</a></li>
+              <li><a class="nav-link" href="/products-list">Products List</a></li>
+            </ul>
+
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="mailto:arkham.workmail@gmail.com"><i data-feather="mail"></i><span>Report Bug</span></a>
+          </li>
+          <!-- <li class="dropdown">
+            <a href="/logout" class="nav-link"><i data-feather="log-out"></i><span>Logout</span></a>
+          </li> -->
+
+
+
+        </ul>
+      </aside>
+    </div>
+
+    <section class="section">
+      <div class="container mt-2">
+        <div class="row">
+
+          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-10  offset-xl-2">
+            <div class="card" style="margin-top: 80px;">
+              <div class="card-header d-flex justify-content-center">
+                <h3>Entries List</h3>
+              </div>
+              <div class="card-body">
+                <!-- <div class="float-right">
+                  <form>
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                      </div>
+                    </div>
+                  </form>
+                </div> -->
+                <div class="clearfix mb-3"></div>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    
+                    <div class="selectgroup selectgroup-pills">
+
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleAuthor" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Author</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleCustomerName" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Customer Name</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleCreatedAt" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Created At</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleQAStatus" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">QA Status</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleQMSStatus" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Your Status</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleQASuggestion" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">QA Suggestion</span>
+                      </label>
+                      <label class="selectgroup-item">
+                        <input type="checkbox" id="toggleQMSSuggestion" class="selectgroup-input" checked>
+                        <span class="selectgroup-button">Your Suggestion</span>
+                      </label>
+                    </div>
+
+                    <tr>
+                      <th>#</th>
+                      <th data-column="author">Author</th>
+                      <th data-column="customerName">Customer Name</th>
+                      <th data-column="createdAt">Created At</th>
+                      <th data-column="qaStatus">QA Status</th>
+                      <th data-column="qmsStatus">Your Status</th>
+                      <th data-column="qaSuggestion">QA Suggestion</th>
+                      <th data-column="qmsSuggestion">Your Suggestion</th>
+                    </tr>
+
+                    <% for (let i=0; i < CCMFormDataReq.length; i++) { %>
+                    <tr>
+                      <td><%= CCMFormDataReq[i].id %></td>
+
+                      <td>
+                        <a href="#" onclick="showPopupAuthor('<%= CCMFormDataReq[i].Name %>', '<%= CCMFormDataReq[i].Designation %>', '<%= CCMFormDataReq[i].Email %>', '<%= CCMFormDataReq[i].Contact %>'); return false;">
+                          <span><%= CCMFormDataReq[i].Name %></span>
+                        </a>
+                      </td>
+
+                      <div id="userPopup" class="arkham-popup">
+                        <span class="close" onclick="closePopupAuthor()">&times;</span>
+                        <p><strong>Name:</strong> <span id="userName"></span></p>
+                        <p><strong>Designation:</strong> <span id="userDesignation"></span></p>
+                        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                        <p><strong>Contact:</strong> <span id="userContact"></span></p>
+                      </div>
+                      <td><%= CCMFormDataReq[i].CustomerName %>
+                        <div class="table-links">
+                          <a href="/entry-details/<%= i + 1 %>">View</a>
+
+                          <div class="bullet"></div>
+                          <a href="#" onclick="showPopupDesc('<%= CCMFormDataReq[i].ComplaintDetails %>'); return false;">View Desc.</a>
+
+                          <div id="userPopupDesc" class="arkham-popup">
+                            <span class="close" onclick="closePopupDesc()">&times;</span>
+                            <p><strong>Description:</strong></p>
+                            <p><span id="Description"></span></p>
+                          </div>
+
+                          <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
+                          <div class="bullet"></div>
+                          <a href="/entry-details-edit/<%= i + 1 %>">Edit</a>
+                          <% } %>
+
+                        </div>
+                      </td>
+                      <!-- ComplaintDate.toLocaleDateString('en-CA') below -->
+
+                      <td><%= CCMFormDataReq[i].ComplaintDate %></td>
+
+                      <td>
+                        <% if (CCMFormDataReq[i].ComplaintApprovedQA === null) { %>
+                        <div class="badge badge-warning">Pending</div>
+                        <% } else if (CCMFormDataReq[i].ComplaintApprovedQA === true) { %>
+                        <div class="badge badge-success">Approved</div>
+                        <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
+
+                        <div class="table-links">
+                          <a href="#" class="accept-btn" data-entry-id="<%= CCMFormDataReq[i].id %>" data-toggle="modal" data-target="#viewCAPAModal">View CAPA</a>
+                        </div>
+                        <% } %>
+
+                        <% } else { %>
+                        <div class="badge badge-danger">Rejected</div>
+                        <% } %>
+                      </td>
+
+                      <td>
+                        <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
+                        <div class="badge badge-warning">Pending</div>
+                        <% if (CCMFormDataReq[i].ComplaintApprovedQA === true) { %>
+                        <div class="table-links">
+                          <a href="#" class="text-danger reject-btn" data-entry-id="<%= CCMFormDataReq[i].id %>" data-toggle="modal" data-target="#rejectModal">Reject</a>
+                          <div class="bullet"></div>
+
+                          <a href="#" class="text-success accept-btn" data-entry-id="<%= CCMFormDataReq[i].id %>" data-toggle="modal" data-target="#acceptCAPAModal">Accept</a>
+                        </div>
+                        <% } %>
+
+                        <% } else if (CCMFormDataReq[i].ComplaintApprovedQMS === true) { %>
+                        <div class="badge badge-success">Approved</div>
+                        <div class="table-links">
+                          <a href="#" class="accept-btn" data-entry-id="<%= CCMFormDataReq[i].id %>" data-toggle="modal" data-target="#viewCAPAModal">View CAPA</a>
+                        </div>
+
+                        <% } else { %>
+                        <div class="badge badge-danger">Rejected</div>
+                        <% } %>
+                      </td>
+
+                      <td>
+                        <% if (CCMFormDataReq[i].ComplaintSuggestionQA === null) { %>
+                        <div class="badge badge-warning">None</div>
+                        <% } else { %>
+                        <div class="badge badge-success">Provided</div>
+                        <div class="table-links">
+                          <a href="#" class="text-success" onclick="viewSuggestion('<%= CCMFormDataReq[i].ComplaintSuggestionQA %>')">View</a>
+                        </div>
+                        <% } %>
+                      </td>
+
+                      <div id="popup" class="arkham-popup">
+                        <span class="close" onclick="closeSuggestionPopup()">&times;</span>
+                        <textarea id="popup-textarea" class="form-control"></textarea>
+                        <button class="btn btn-primary btn-lg btn-block" onclick="saveAndCloseSuggestionPopup('<%= CCMFormDataReq[i].id %>')">Save</button>
+                      </div>
+
+                      <td>
+                        <% if (CCMFormDataReq[i].ComplaintSuggestionQMS === null) { %>
+                        <div class="badge badge-warning">None</div>
+                        <div class="table-links">
+                          <a href="#" class="text-success" onclick="showSuggestionPopup(<%= CCMFormDataReq[i].id %>)">Add</a>
+                        </div>
+                        <% } else { %>
+                        <div class="badge badge-success">Provided</div>
+                        <div class="table-links">
+                          <a href="#" class="text-danger" onclick="removeSuggestion(<%= CCMFormDataReq[i].id %>)">Remove</a>
+                          <div class="bullet"></div>
+                          <a href="#" class="text-success" onclick="viewSuggestion('<%= CCMFormDataReq[i].ComplaintSuggestionQMS %>')">View</a>
+                        </div>
+                        <% } %>
+                      </td>
+                    </tr>
+                    <% } %>
+
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rejectModalLabel">Reject Complaint</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Are you sure you want to reject this complaint?</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-success" id="rejectBtn">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- acceptCAPAModal -->
+    <div class="modal fade" id="acceptCAPAModal" tabindex="-1" role="dialog" aria-labelledby="acceptCAPAModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="acceptCAPAModalLabel">View CAPA Users</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Following are the CAPA users selected by the user</label>
+              <select class="form-control select2" multiple style="width: 100%;" id="capaUsersSelect">
+                <% for (let i=0; i < CCMUserDataReq.length; i++) { %>
+                <option value="<%= CCMUserDataReq[i].Name %>"><%= CCMUserDataReq[i].Name %></option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-success" id="acceptBtn">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- viewCAPAModal -->
+    <div class="modal fade" id="viewCAPAModal" tabindex="-1" role="dialog" aria-labelledby="viewCAPAModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewCAPAModalLabel">View CAPA Users</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Following are the CAPA users selected by the user</label>
+              <select class="form-control select2" multiple style="width: 100%;" id="viewCAPAUsersSelect" disabled>
+                <% for (let i=0; i < CCMUserDataReq.length; i++) { %>
+                <option value="<%= CCMUserDataReq[i].Name %>"><%= CCMUserDataReq[i].Name %></option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="/js/app.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="/bundles/select2/dist/js/select2.full.min.js"></script>
+  <script src="/bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <!-- Page Specific JS File -->
+  <!-- Template JS File -->
+  <script src="/js/scripts.js"></script>
+  <!-- Custom JS File -->
+  <script src="/js/custom.js"></script>
+  <script src="/bundles/sweetalert/sweetalert.min.js"></script>
+  <script src="/js/page/sweetalert.js"></script>
+
+  <!-- Reject -->
+  <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+      const rejectButtons = document.querySelectorAll('.reject-btn');
+
+      rejectButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+
+          const entryId = this.getAttribute('data-entry-id');
+
+          $('#rejectModal').modal('show');
+
+          document.getElementById('rejectBtn').addEventListener('click', function() {
+            // Make an AJAX request to update the ComplaintApprovedQA status
+            fetch(`/rejectComplaintQMS?id=${entryId}&status=false`, {
+                method: 'POST'
+              })
+              .then(response => {
+                if (response.ok) {
+                  // Reload the page after successful update
+                  window.location.reload();
+                } else {
+                  console.error('Failed to reject complaint');
+                }
+              })
+              .catch(error => {
+                console.error('Error rejecting complaint:', error);
+              });
+          });
+        });
+      });
+    });
+  </script>
+
+  <!-- View -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const acceptButtons = document.querySelectorAll('.accept-btn');
+
+      acceptButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+
+          const entryId = this.getAttribute('data-entry-id');
+
+          // Fetch previously selected users for this entry
+          fetch(`/getSelectedUsers?entryId=${entryId}`)
+            .then(response => response.json())
+            .then(data => {
+              const selectedUsers = data.selectedUsers.split(','); // Split string into array
+
+              // Set previously selected users as selected options
+              $('#viewCAPAUsersSelect').val(selectedUsers);
+              $('#viewCAPAUsersSelect').trigger('change');
+            })
+            .catch(error => {
+              console.error('Error fetching selected users:', error);
+            });
+        });
+      });
+    });
+  </script>
+
+  <!-- Accept -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const acceptButtons = document.querySelectorAll('.accept-btn');
+
+      acceptButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+          event.preventDefault();
+
+          const entryId = this.getAttribute('data-entry-id');
+
+          // Fetch previously selected users for this entry
+          fetch(`/getSelectedUsers?entryId=${entryId}`)
+            .then(response => response.json())
+            .then(data => {
+              const selectedUsers = data.selectedUsers.split(','); // Split string into array
+
+              // Set previously selected users as selected options
+              $('#capaUsersSelect').val(selectedUsers);
+              $('#capaUsersSelect').trigger('change');
+            })
+            .catch(error => {
+              console.error('Error fetching selected users:', error);
+            });
+        });
+
+        // Move the accept button event listener outside of the acceptButtons.forEach loop
+        document.getElementById('acceptBtn').addEventListener('click', function() {
+          const entryId = document.querySelector('.accept-btn').getAttribute('data-entry-id');
+          const selectedOptions = $('#capaUsersSelect').val();
+          const selectedUsers = selectedOptions.join(',');
+
+          fetch(`/acceptComplaintQMS?id=${entryId}&status=true&selectedUsers=${selectedUsers}`, {
+              method: 'POST'
+            })
+            .then(response => {
+              if (response.ok) {
+                window.location.reload();
+              } else {
+                console.error('Failed to update complaint status');
+              }
+            })
+            .catch(error => {
+              console.error('Error updating complaint status:', error);
+            });
+        });
+      });
+    });
+  </script>
+
+  <script>
+    // Function to show the popup
+    function showSuggestionPopup() {
+      document.getElementById("popup").style.display = "block";
+    }
+
+    // Function to close the popup
+    function closeSuggestionPopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    // Update the function to accept the entry ID as a parameter
+    function saveAndCloseSuggestionPopup(id) {
+      // Retrieve the textarea content
+      var text = document.getElementById("popup-textarea").value;
+
+      // Make an AJAX request to the server to update the suggestion
+      fetch(`/updateSuggestionQA?id=${id}&suggestion=${encodeURIComponent(text)}`, {
+          method: 'POST'
+        })
+        .then(response => {
+          if (response.ok) {
+            // Refresh the page or update the UI as needed
+            window.location.reload(); // For simplicity, reloading the page here
+          } else {
+            console.error('Failed to update suggestion');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating suggestion:', error);
+        });
+
+      // Close the popup
+      closeSuggestionPopup();
+    }
+
+    function saveAndCloseSuggestionPopup(id) {
+      // Retrieve the textarea content
+      var text = document.getElementById("popup-textarea").value;
+      // Do something with the text, for example, you can submit it via AJAX
+      console.log("Text submitted:", text);
+
+      // Make an AJAX request to the server to update the suggestion
+      fetch(`/updateSuggestionQA?id=${id}&suggestion=${encodeURIComponent(text)}`, {
+          method: 'POST'
+        })
+        .then(response => {
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            console.error('Failed to update suggestion');
+          }
+        })
+        .catch(error => {
+          console.error('Error updating suggestion:', error);
+        });
+
+      // Close the popup
+      closeSuggestionPopup();
+    }
+
+    function removeSuggestion(id) {
+      if (confirm("Are you sure you want to remove the suggestion?")) {
+        fetch(`/removeSuggestionQA?id=${id}`, {
+            method: 'POST'
+          })
+          .then(response => {
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              console.error('Failed to remove suggestion');
+            }
+          })
+          .catch(error => {
+            console.error('Error removing suggestion:', error);
+          });
+      }
+    }
+
+    function viewSuggestion(suggestion) {
+      alert("Suggestion: " + suggestion);
+    }
+
+    function showPopupAuthor(name, designation, email, contact) {
+      document.getElementById("userName").innerText = name;
+      document.getElementById("userDesignation").innerText = designation;
+      document.getElementById("userEmail").innerText = email;
+      document.getElementById("userContact").innerText = contact;
+      document.getElementById("userPopupAuthor").style.display = "block";
+    }
+
+    function showPopupDesc(description) {
+      document.getElementById("Description").innerText = description;
+      document.getElementById("userPopupDesc").style.display = "block";
+
+    }
+
+
+    function closePopupAuthor() {
+      document.getElementById("userPopupAuthor").style.display = "none";
+    }
+
+    function closePopupDesc() {
+      document.getElementById("userPopupDesc").style.display = "none";
+    }
+  </script>
+
+  <script>
+    //Columns
+    document.getElementById("toggleAuthor").addEventListener("change", function() {
+      toggleColumn("author");
+    });
+
+    document.getElementById("toggleCustomerName").addEventListener("change", function() {
+      toggleColumn("customerName");
+    });
+
+    document.getElementById("toggleCreatedAt").addEventListener("change", function() {
+      toggleColumn("createdAt");
+    });
+
+    document.getElementById("toggleQAStatus").addEventListener("change", function() {
+      toggleColumn("qaStatus");
+    });
+
+    document.getElementById("toggleQMSStatus").addEventListener("change", function() {
+      toggleColumn("qmsStatus");
+    });
+
+    document.getElementById("toggleQASuggestion").addEventListener("change", function() {
+      toggleColumn("qaSuggestion");
+    });
+
+    document.getElementById("toggleQMSSuggestion").addEventListener("change", function() {
+      toggleColumn("qmsSuggestion");
+    });
+
+    //Main function
+    function toggleColumn(columnName) {
+      var cells = document.querySelectorAll("td[data-column='" + columnName + "'], th[data-column='" + columnName + "'], #" + columnName + "Header");
+      cells.forEach(function(cell) {
+        cell.style.display = cell.style.display === "none" ? "table-cell" : "none";
+      });
+
+      var checkbox = document.getElementById("toggle" + columnName.charAt(0).toUpperCase() + columnName.slice(1));
+      checkbox.checked = cells[0].style.display !== "none";
+    }
+  </script>
+
+
+</body>
+
+</html>

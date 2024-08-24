@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Al Rahim Textile - Dashboard Login</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="css/app.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-social/bootstrap-social.css">
+  <link rel="stylesheet" href="bundles/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar sticky">
+        <div class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+            <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                <i data-feather="maximize"></i>
+              </a></li>
+            <li>
+              
+            </li>
+          </ul>
+        </div>
+        <ul class="navbar-nav navbar-right">
+          
+          
+
+          <!--Notifications-->
+
+
+          <li class="dropdown"><a href="#" data-toggle="dropdown"
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
+                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+            <div class="dropdown-menu dropdown-menu-right pullDown">
+              <div class="dropdown-title">Welcome <%= userData.Designation %></div>
+              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Email:  <%= userData.Email %>
+              </a> <a  class="dropdown-item has-icon"> 
+                Contact:  <%= userData.Contact %>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="main-sidebar sidebar-style-2">
+
+      <aside id="sidebar-wrapper">
+
+        <div class="sidebar-brand">
+
+          <a href="/">
+            <img alt="image" src="/img/al_rahim.jpg" class="header-logo" style="width: 70%; height: auto;" />
+          </a>
+
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+          <li class="menu-header">Main</li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "QMS Team" || userData.Designation == "Marketing Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/ccm-form1" class="nav-link"><i data-feather="monitor"></i><span>CCM Form</span></a>
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
+          </li>
+
+          <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
+          <li class="dropdown">
+            <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+          </li>
+          <% } %>
+
+          <% if(userData.Designation == "Admin") { %>
+
+          <li class="dropdown">
+            <a href="/" class="menu-toggle nav-link has-dropdown"><i data-feather="pie-chart"></i><span>Admin Actions</span></a>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="/users-list">Users List</a></li>
+              <li><a class="nav-link" href="/products-list">Products List</a></li>
+            </ul>
+
+          </li>
+          <% } %>
+
+          <li class="dropdown">
+            <a href="mailto:arkham.workmail@gmail.com"><i data-feather="mail"></i><span>Report Bug</span></a>
+          </li>
+          <!-- <li class="dropdown">
+            <a href="/logout" class="nav-link"><i data-feather="log-out"></i><span>Logout</span></a>
+          </li> -->
+
+
+
+        </ul>
+      </aside>
+    </div>
+
+    <section class="section">
+      <div class="container mt-2">
+        <div class="row">
+
+          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-3 offset-xl-2">
+            <div class="card card-primary" style="margin-top: 80px;">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Brand Names</h4>
+                <a href="#" class="btn btn-icon btn-primary" id="addBrandNameModalBtn"><i class="fas fa-plus-circle"></i></a>
+              </div>
+              <div class="card-body">
+                <div class="table-container table-responsive" style="max-height: 200px; overflow-y: auto;">
+                  <table class="table table-bordered table-md" id="brandNameTable">
+                    <thead style="position: sticky; top: 0; background-color: #ffffff;">
+                      <tr>
+                        <th>#</th>
+                        <th>Brand Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (let i=0; i < CCMFieldsDataReq.length; i++) { %>
+                      <% if (CCMFieldsDataReq[i].BrandName) { %>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><%= CCMFieldsDataReq[i].BrandName %></td>
+                        <% } %>
+                        <% } %>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="pagination" class="d-flex justify-content-center"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-3 offset-xl-0">
+            <div class="card card-primary" style="margin-top: 80px;">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Product Names</h4>
+                <a href="#" class="btn btn-icon btn-primary" id="addProductModalBtn"><i class="fas fa-plus-circle"></i></a>
+              </div>
+              <div class="card-body">
+                <div class="table-container table-responsive" style="max-height: 200px; overflow-y: auto;">
+                  <table class="table table-bordered table-md" id="productTable">
+                    <thead style="position: sticky; top: 0; background-color: #ffffff;">
+                      <tr>
+                        <th>#</th>
+                        <th>Product Names</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (let i=0; i < CCMFieldsDataReq.length; i++) { %>
+                      <% if (CCMFieldsDataReq[i].Product) { %>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><%= CCMFieldsDataReq[i].Product %></td>
+                        <% } %>
+                        <% } %>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="pagination" class="d-flex justify-content-center"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12 col-sm-8 offset-sm-1 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-3 offset-xl-0">
+            <div class="card card-primary" style="margin-top: 80px;">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Article Names</h4>
+                <a href="#" class="btn btn-icon btn-primary" id="addArticleModalBtn"><i class="fas fa-plus-circle"></i></a>
+              </div>
+              <div class="card-body">
+                <div class="table-container table-responsive" style="max-height: 200px; overflow-y: auto;">
+                  <table class="table table-bordered table-md" id="articleTable">
+                    <thead style="position: sticky; top: 0; background-color: #ffffff;">
+                      <tr>
+                        <th>#</th>
+                        <th>Article Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (let i=0; i < CCMFieldsDataReq.length; i++) { %>
+                      <% if (CCMFieldsDataReq[i].Article) { %>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><%= CCMFieldsDataReq[i].Article %></td>
+                      </tr>
+                      <% } %>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="pagination" class="d-flex justify-content-center"></div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+
+
+
+    </section>
+
+  </div>
+
+  <!-- Brand Name Modal -->
+  <div class="modal fade" id="addBrandNameModal" tabindex="-1" role="dialog" aria-labelledby="addBrandNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBrandNameModalLabel">Add New Brand Name</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addBrandNameForm">
+            <div class="form-group">
+              <label>Brand Name</label>
+              <input type="text" class="form-control" name="BrandName" id="BrandName">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveBrandNameBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addProductForm">
+            <div class="form-group">
+              <label>Brand Name</label>
+              <input type="text" class="form-control" name="Product" id="Product">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveProductBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Modal -->
+  <div class="modal fade" id="addArticleModal" tabindex="-1" role="dialog" aria-labelledby="addArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addArticleModalLabel">Add New Article</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addArticleForm">
+            <div class="form-group">
+              <label>Article Name</label>
+              <input type="text" class="form-control" name="Article" id="Article">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveArticleBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- General JS Scripts -->
+  <script src="js/app.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="bundles/select2/dist/js/select2.full.min.js"></script>
+  <script src="bundles/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+  <script src="bundles/datatables/datatables.min.js"></script>
+  <script src="bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+  <script src="bundles/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Page Specific JS File -->
+  <script src="js/page/datatables.js"></script>
+  <!-- Template JS File -->
+  <script src="js/scripts.js"></script>
+  <!-- Custom JS File -->
+  <script src="js/custom.js"></script>
+  <script src="bundles/sweetalert/sweetalert.min.js"></script>
+  <script src="js/page/sweetalert.js"></script>
+
+  <!-- /add-brandname -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const addUserBtn = document.querySelector('#addBrandNameModalBtn');
+      addUserBtn.addEventListener('click', function() {
+        $('#addBrandNameModal').modal('show');
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      const saveBrandNameBtn = document.getElementById('saveBrandNameBtn');
+      const addBrandNameForm = document.getElementById('addBrandNameForm');
+
+      saveBrandNameBtn.addEventListener('click', function() {
+        // Serialize the form data
+        const formData = new FormData(addBrandNameForm);
+
+        // Send a POST request to the server with the form data
+        fetch('/add-brandname', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to add Brand Name');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert(data.message); // Show success message
+            $('#addBrandNameModal').modal('hide'); // Hide the modal
+          })
+          .catch(error => {
+            console.error('Error adding Brand Name:', error);
+            alert('Failed to add Brand Name');
+          });
+      });
+    });
+  </script>
+
+  <!-- /add-product -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const addUserBtn = document.querySelector('#addProductModalBtn');
+      addUserBtn.addEventListener('click', function() {
+        $('#addProductModal').modal('show');
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      const saveProductBtn = document.getElementById('saveProductBtn');
+      const addProductForm = document.getElementById('addProductForm');
+
+      saveProductBtn.addEventListener('click', function() {
+        // Serialize the form data
+        const formData = new FormData(addProductForm);
+
+        // Send a POST request to the server with the form data
+        fetch('/add-product', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to add Product');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert(data.message); // Show success message
+            $('#addProductModal').modal('hide'); // Hide the modal
+          })
+          .catch(error => {
+            console.error('Error adding Product:', error);
+            alert('Failed to add Product');
+          });
+      });
+    });
+  </script>
+
+  <!-- /add-article -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const addUserBtn = document.querySelector('#addArticleModalBtn');
+      addUserBtn.addEventListener('click', function() {
+        $('#addArticleModal').modal('show');
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+      const saveArticleBtn = document.getElementById('saveArticleBtn');
+      const addArticleForm = document.getElementById('addArticleForm');
+
+      saveArticleBtn.addEventListener('click', function() {
+        // Serialize the form data
+        const formData = new FormData(addArticleForm);
+
+        // Send a POST request to the server with the form data
+        fetch('/add-article', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Failed to add Article');
+            }
+            return response.json();
+          })
+          .then(data => {
+            alert(data.message); // Show success message
+            $('#addArticleModal').modal('hide'); // Hide the modal
+          })
+          .catch(error => {
+            console.error('Error adding Article:', error);
+            alert('Failed to add Article');
+          });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
