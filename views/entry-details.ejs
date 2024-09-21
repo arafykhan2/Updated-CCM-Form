@@ -35,27 +35,25 @@
                 <i data-feather="maximize"></i>
               </a></li>
             <li>
-              
+
             </li>
           </ul>
         </div>
         <ul class="navbar-nav navbar-right">
-          
-          
+
+
 
           <!--Notifications-->
 
 
-          <li class="dropdown"><a href="#" data-toggle="dropdown"
-              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
-                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png" class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title">Welcome <%= userData.Designation %></div>
-              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
-              </a> <a  class="dropdown-item has-icon"> 
-                Email:  <%= userData.Email %>
-              </a> <a  class="dropdown-item has-icon"> 
-                Contact:  <%= userData.Contact %>
+              <a class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a class="dropdown-item has-icon">
+                Email: <%= userData.Email %>
+              </a> <a class="dropdown-item has-icon">
+                Contact: <%= userData.Contact %>
               </a>
               <div class="dropdown-divider"></div>
               <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
@@ -91,7 +89,7 @@
           <li class="dropdown">
             <a href="/entries-norm-user" class="nav-link"><i data-feather="monitor"></i><span>Your Entries</span></a>
           </li>
-          
+
           <% if(userData.Designation == "QA Team" || userData.Designation == "Admin") { %>
           <li class="dropdown">
             <a href="/entries-qa" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QA</span></a>
@@ -99,11 +97,11 @@
           <% } %>
 
           <% if(userData.Designation == "QMS Team" || userData.Designation == "Admin") { %>
-            <li class="dropdown">
-              <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
-            </li>
-            <% } %>
-  
+          <li class="dropdown">
+            <a href="/entries-qms" class="nav-link"><i data-feather="monitor"></i><span>Review Entries for QMS</span></a>
+          </li>
+          <% } %>
+
           <% if(userData.Designation == "Admin") { %>
 
           <li class="dropdown">
@@ -209,26 +207,43 @@
                     <div class="form-group">
                       <label>Select Nature(s) of Complaint</label>
                       <select class="form-control select2" multiple name="NatureOfComplaint[]" disabled>
+                        <!-- Quality optgroup -->
                         <optgroup label="Quality">
-                          <option value="Workmanship" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Workmanship') ? 'selected' : '' %>>Workmanship</option>
-                          <option value="Measurement" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Measurement') ? 'selected' : '' %>>Measurement</option>
-                          <option value="Weight" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Weight') ? 'selected' : '' %>>Weight</option>
-                          <option value="Packaging" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Packaging') ? 'selected' : '' %>>Packaging</option>
-                          <option value="Safety & regulatory" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Safety & regulatory') ? 'selected' : '' %>>Safety & regulatory</option>
+                          <option value="Workmanship" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Workmanship') ? 'selected' : '' %>>Workmanship</option>
+
+                          <option value="Measurement" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Measurement') ? 'selected' : '' %>>Measurement</option>
+
+                          <option value="Weight" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Weight') ? 'selected' : '' %>>Weight</option>
+
+                          <option value="Packaging" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Packaging') ? 'selected' : '' %>>Packaging</option>
+
+                          <option value="Safety & regulatory" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Safety & regulatory') ? 'selected' : '' %>>Safety & regulatory</option>
                         </optgroup>
+
+                        <!-- Testing optgroup -->
                         <optgroup label="Testing">
-                          <option value="Performance failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Performance failure') ? 'selected' : '' %>>Performance failure</option>
-                          <option value="Durability failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Durability failure') ? 'selected' : '' %>>Durability failure</option>
-                          <option value="Aesthetics failure" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Aesthetics failure') ? 'selected' : '' %>>Aesthetics failure</option>
-                          <option value="MRSL non compliant" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('MRSL non compliant') ? 'selected' : '' %>>MRSL non compliant</option>
+                          <option value="Performance failure" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Performance failure') ? 'selected' : '' %>>Performance failure</option>
+
+                          <option value="Durability failure" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Durability failure') ? 'selected' : '' %>>Durability failure</option>
+
+                          <option value="Aesthetics failure" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Aesthetics failure') ? 'selected' : '' %>>Aesthetics failure</option>
+
+                          <option value="MRSL non compliant" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('MRSL non compliant') ? 'selected' : '' %>>MRSL non compliant</option>
                         </optgroup>
+
+                        <!-- Delivery optgroup -->
                         <optgroup label="Delivery">
-                          <option value="Late shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Late shipment') ? 'selected' : '' %>>Late shipment</option>
-                          <option value="Wrong shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Wrong shipment') ? 'selected' : '' %>>Wrong shipment</option>
-                          <option value="Short shipment" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Short shipment') ? 'selected' : '' %>>Short shipment</option>
-                          <option value="Mildew & mold" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Mildew & mold') ? 'selected' : '' %>>Mildew & mold</option>
-                          <option value="Damages" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Damages') ? 'selected' : '' %>>Damages</option>
-                          <option value="Others" <%= CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Others') ? 'selected' : '' %>>Others</option>
+                          <option value="Late shipment" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Late shipment') ? 'selected' : '' %>>Late shipment</option>
+
+                          <option value="Wrong shipment" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Wrong shipment') ? 'selected' : '' %>>Wrong shipment</option>
+
+                          <option value="Short shipment" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Short shipment') ? 'selected' : '' %>>Short shipment</option>
+
+                          <option value="Mildew & mold" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Mildew & mold') ? 'selected' : '' %>>Mildew & mold</option>
+
+                          <option value="Damages" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Damages') ? 'selected' : '' %>>Damages</option>
+
+                          <option value="Others" <%= CCMFormDataReq && CCMFormDataReq[entryID-1] && CCMFormDataReq[entryID-1].NatureOfComplaint && CCMFormDataReq[entryID-1].NatureOfComplaint.includes('Others') ? 'selected' : '' %>>Others</option>
                         </optgroup>
                       </select>
                     </div>

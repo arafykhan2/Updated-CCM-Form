@@ -1,17 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize(
-  'alrahim_textile_rev_db',
-  'root',
-  '1234',
-  {
-    host: 'localhost',  
-    dialect: 'mysql'
-  }
-);
+// Database connection
+const sequelize = new Sequelize('alrahim_textile_rev_db', 'root', '1234', {
+  host: 'localhost',
+  dialect: 'mysql',
+});
 
+// Define CCMFormData model
 const CCMFormData = sequelize.define("CCMFormData", {
-
   Name: {
     type: DataTypes.TEXT,
   },
@@ -34,10 +30,10 @@ const CCMFormData = sequelize.define("CCMFormData", {
     type: DataTypes.TEXT,
   },
   PONumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING, // Changed to STRING for larger numbers
   },
   SOSNumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING, // Changed to STRING for larger numbers
   },
   BrandName: {
     type: DataTypes.TEXT,
@@ -59,19 +55,19 @@ const CCMFormData = sequelize.define("CCMFormData", {
   },
   Design: {
     type: DataTypes.TEXT,
-  }, // Not used
+  },
   ProductID: {
     type: DataTypes.TEXT,
-  }, // Not used
+  },
   ComplaintDetails: {
     type: DataTypes.TEXT,
   },
   ComplaintDate: {
     type: DataTypes.DATE,
   },
-  FilePath: {
-    type: DataTypes.TEXT,
-  },
+  // FilePath: {
+  //   type: DataTypes.STRING(255), // Keep as STRING(255)
+  // },
   ComplaintApprovedQA: {
     type: DataTypes.BOOLEAN,
   },
@@ -96,10 +92,15 @@ const CCMFormData = sequelize.define("CCMFormData", {
   ReviewerUsernameQMS: {
     type: DataTypes.TEXT,
   },
+
+  // Add this new field for the file path
+  file_path: {
+    type: DataTypes.STRING(255), // Or use a larger type if necessary
+  },
 });
 
+// Define CCMUserData model
 const CCMUserData = sequelize.define("CCMUserData", {
-
   Name: {
     type: DataTypes.TEXT,
   },
@@ -115,11 +116,10 @@ const CCMUserData = sequelize.define("CCMUserData", {
   Contact: {
     type: DataTypes.TEXT,
   },
-
 });
 
+// Define CCMFieldsData model
 const CCMFieldsData = sequelize.define("CCMFieldsData", {
-
   BrandName: {
     type: DataTypes.TEXT,
   },
@@ -134,7 +134,7 @@ const CCMFieldsData = sequelize.define("CCMFieldsData", {
   },
   Design: {
     type: DataTypes.TEXT,
-  }, 
+  },
   ProductID: {
     type: DataTypes.TEXT,
   },
@@ -144,15 +144,23 @@ const CCMFieldsData = sequelize.define("CCMFieldsData", {
   NOCDropdownSubType: {
     type: DataTypes.TEXT,
   },
-
 });
 
+// Define ImagesTable model for storing images
+const ImagesTable = sequelize.define("ImagesTable", {
+  image_path: {
+    type: DataTypes.STRING(255),
+  },
+  image_data: {
+    type: DataTypes.BLOB("long"), // LONGBLOB for image data
+  },
+});
 
-
-sequelize.sync().then(() => {
-  console.log('Product Data table created successfully!');
+// Sync the models with the database
+sequelize.sync({ force: false }).then(() => {
+  console.log('Tables created successfully!');
 }).catch((error) => {
-  console.error('Unable to create table : ', error);
+  console.error('Unable to create tables:', error);
 });
 
-module.exports = {sequelize, CCMFormData, CCMUserData, CCMFieldsData};
+module.exports = { sequelize, CCMFormData, CCMUserData, CCMFieldsData, ImagesTable };

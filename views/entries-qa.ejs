@@ -69,27 +69,25 @@
                 <i data-feather="maximize"></i>
               </a></li>
             <li>
-              
+
             </li>
           </ul>
         </div>
         <ul class="navbar-nav navbar-right">
-          
-          
+
+
 
           <!--Notifications-->
 
 
-          <li class="dropdown"><a href="#" data-toggle="dropdown"
-              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png"
-                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="img/user.png" class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title">Welcome <%= userData.Designation %></div>
-              <a  class="dropdown-item has-icon">Name : <%= userData.Name %>
-              </a> <a  class="dropdown-item has-icon"> 
-                Email:  <%= userData.Email %>
-              </a> <a  class="dropdown-item has-icon"> 
-                Contact:  <%= userData.Contact %>
+              <a class="dropdown-item has-icon">Name : <%= userData.Name %>
+              </a> <a class="dropdown-item has-icon">
+                Email: <%= userData.Email %>
+              </a> <a class="dropdown-item has-icon">
+                Contact: <%= userData.Contact %>
               </a>
               <div class="dropdown-divider"></div>
               <a href="/logout" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
@@ -249,10 +247,9 @@
                       <td>
                         <%= CCMFormDataReq[i].CustomerName %>
                         <div class="table-links">
-
                           <a href="/entry-details/<%= i + 1 %>">View</a>
                           <div class="bullet"></div>
-                          <a href="#" onclick="showPopupDesc('<%= CCMFormDataReq[i].ComplaintDetails %>'); return false;">View Desc.</a>
+                          <a href="#" onclick="showPopupDesc('<%= CCMFormDataReq[i].ComplaintDetails %>'); return false;">View Description</a>
 
                           <div id="userPopupDesc" class="arkham-popup">
                             <span class="close" onclick="closePopupDesc()">&times;</span>
@@ -264,9 +261,9 @@
                           <div class="bullet"></div>
                           <a href="/entry-details-edit/<%= i + 1 %>">Edit</a>
                           <% } %>
-
                         </div>
                       </td>
+
                       <!-- ComplaintDate.toLocaleDateString('en-CA') below -->
 
                       <td><%= CCMFormDataReq[i].ComplaintDate %></td>
@@ -292,24 +289,19 @@
 
                       <td>
                         <% if (CCMFormDataReq[i].ComplaintSuggestionQA === null) { %>
-                        <div class="badge badge-warning">None</div>
-                        <% if (CCMFormDataReq[i].ComplaintApprovedQA === null) { %>
-                        <div class="table-links">
-                          <a href="#" class="text-success" onclick="showSuggestionPopup(<%= CCMFormDataReq[i].id %>)">Add</a>
-                        </div>
-                        <% } %>
+                        <a href="#" class="btn btn-primary" onclick="showJustificationPopup()">Add Just.</a>
                         <% } else { %>
-                        <div class="badge badge-success">Provided</div>
-                        <div class="table-links">
-                          <% if (CCMFormDataReq[i].ComplaintApprovedQA === null) { %>
-                          <a href="#" class="text-danger" onclick="removeSuggestion(<%= CCMFormDataReq[i].id %>)">Remove</a>
-                          <div class="bullet"></div>
-                          <% } %>
-
-                          <a href="#" class="text-success" onclick="viewSuggestion('<%= CCMFormDataReq[i].ComplaintSuggestionQA %>')">View</a>
-                        </div>
+                        <a href="#" class="btn btn-primary" onclick="viewJustification('<%= CCMFormDataReq[i].ComplaintSuggestionQA %>')">View Just.</a>
+                        <a href="#" class="btn btn-primary" onclick="removeJustification(<%= CCMFormDataReq[i].id %>)">Remove Just.</a>
+                        <a href="#" class="btn btn-primary" onclick="showJustificationPopupEdit('<%= CCMFormDataReq[i].ComplaintSuggestionQA %>')">Edit Just.</a>
                         <% } %>
+
                       </td>
+                      <div id="popup" class="arkham-popup">
+                        <span class="close" onclick="closeJustificationPopup()">&times;</span>
+                        <textarea id="popup-textarea" class="form-control"></textarea>
+                        <button class="btn btn-primary btn-lg btn-block" onclick="saveAndCloseJustificationPopup('<%= CCMFormDataReq[i].id %>')">Save</button>
+                      </div>
 
                       <td>
                         <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
@@ -321,14 +313,14 @@
                         <% } %>
                       </td>
 
-                      <div id="popup" class="arkham-popup">
+                      <!-- <div id="popup" class="arkham-popup">
                         <span class="close" onclick="closeSuggestionPopup()">&times;</span>
                         <textarea id="popup-textarea" class="form-control"></textarea>
                         <button class="btn btn-primary btn-lg btn-block" onclick="saveAndCloseSuggestionPopup('<%= CCMFormDataReq[i].id %>')">Save</button>
-                      </div>
+                      </div> -->
 
                       <td>
-                        <% if (CCMFormDataReq[i].ComplaintSuggestionQMS === null) { %>
+                        <% if (CCMFormDataReq[i].ComplaintSxuggestionQMS === null) { %>
                         <div class="badge badge-warning">None</div>
                         <% } else { %>
                         <div class="badge badge-success">Provided</div>
@@ -558,86 +550,53 @@
   </script>
 
   <script>
-    // Function to show the popup
-    function showSuggestionPopup() {
+    let currentEntryId = null; // Store the current entry ID for editing
+
+    // Function to open the suggestion popup
+    function showSuggestionPopup(entryId, currentSuggestion) {
+      currentEntryId = entryId; // Set the current entry ID
+      document.getElementById("popup-textarea").value = currentSuggestion; // Pre-fill the textarea with the current suggestion
+      document.getElementById("popup").style.display = "block"; // Show the popup
+    }
+
+    // Function to save the edited suggestion
+    function saveAndCloseSuggestionPopup() {
+      const updatedSuggestion = document.getElementById("popup-textarea").value;
+
+      // Send the updated suggestion to the server or handle it as required
+      // Example: Send an AJAX request (assuming jQuery is available)
+      $.ajax({
+        url: '/save-suggestion', // Adjust the endpoint URL
+        method: 'POST',
+        data: {
+          entryId: currentEntryId,
+          suggestion: updatedSuggestion
+        },
+        success: function(response) {
+          alert('Suggestion updated successfully!');
+          document.getElementById("popup").style.display = "none"; // Close the popup after saving
+          // Optionally, update the UI to reflect the changes
+        },
+        error: function(error) {
+          console.error('Error saving suggestion:', error);
+        }
+      });
+    }
+
+    // Function to close the suggestion popup without saving
+    function closeSuggestionPopup() {
+      document.getElementById("popup").style.display = "none"; // Simply hide the popup
+    }
+
+    // Function to view an existing suggestion
+    function viewSuggestion(suggestion) {
+      document.getElementById("popup-textarea").value = suggestion;
       document.getElementById("popup").style.display = "block";
     }
 
-    // Function to close the popup
-    function closeSuggestionPopup() {
-      document.getElementById("popup").style.display = "none";
-    }
-
-    // Update the function to accept the entry ID as a parameter
-    function saveAndCloseSuggestionPopup(id) {
-      // Retrieve the textarea content
-      var text = document.getElementById("popup-textarea").value;
-
-      // Make an AJAX request to the server to update the suggestion
-      fetch(`/updateSuggestionQA?id=${id}&suggestion=${encodeURIComponent(text)}`, {
-          method: 'POST'
-        })
-        .then(response => {
-          if (response.ok) {
-            // Refresh the page or update the UI as needed
-            window.location.reload(); // For simplicity, reloading the page here
-          } else {
-            console.error('Failed to update suggestion');
-          }
-        })
-        .catch(error => {
-          console.error('Error updating suggestion:', error);
-        });
-
-      // Close the popup
-      closeSuggestionPopup();
-    }
-
-    function saveAndCloseSuggestionPopup(id) {
-      // Retrieve the textarea content
-      var text = document.getElementById("popup-textarea").value;
-      // Do something with the text, for example, you can submit it via AJAX
-      console.log("Text submitted:", text);
-
-      // Make an AJAX request to the server to update the suggestion
-      fetch(`/updateSuggestionQA?id=${id}&suggestion=${encodeURIComponent(text)}`, {
-          method: 'POST'
-        })
-        .then(response => {
-          if (response.ok) {
-            window.location.reload();
-          } else {
-            console.error('Failed to update suggestion');
-          }
-        })
-        .catch(error => {
-          console.error('Error updating suggestion:', error);
-        });
-
-      // Close the popup
-      closeSuggestionPopup();
-    }
-
-    function removeSuggestion(id) {
-      if (confirm("Are you sure you want to remove the suggestion?")) {
-        fetch(`/removeSuggestionQA?id=${id}`, {
-            method: 'POST'
-          })
-          .then(response => {
-            if (response.ok) {
-              window.location.reload();
-            } else {
-              console.error('Failed to remove suggestion');
-            }
-          })
-          .catch(error => {
-            console.error('Error removing suggestion:', error);
-          });
-      }
-    }
-
-    function viewSuggestion(suggestion) {
-      alert("Suggestion: " + suggestion);
+    // Example: Assuming you have a button to edit a suggestion in each row
+    function showJustificationPopupEdit(suggestion) {
+      showSuggestionPopup(currentEntryId, suggestion);
     }
 
     function showPopupAuthor(name, designation, email, contact) {

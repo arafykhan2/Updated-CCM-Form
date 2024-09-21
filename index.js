@@ -6,9 +6,11 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const session = require("express-session");
-
-
-
+const PDFLib = require('pdf-lib');
+const { fromBuffer } = require('file-type');
+const mysql = require('mysql2');
+const { Sequelize } = require('sequelize');
+// const Image = require('../models/Image'); // Import your database model
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,14 +19,36 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage: storage });
 
-const fileStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
+// Set up storage engine
+const storage1 = multer.diskStorage({
+  destination: './uploads/',
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
+
+// Init upload
+const upload1 = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // 1MB limit
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).single('complaintFile');
+
+// Check file type
+function checkFileType(file, cb) {
+  const filetypes = /jpeg|jpg|png|pdf/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb('Error: Images and PDFs Only!');
+  }
+}
+
 
 // const dataUpload = require("./controllers/dataUpload")
 
@@ -92,6 +116,75 @@ function isAuthenticated(req, res, next) {
     res.redirect("/");
   }
 }
+
+// const pdfFileName = `form_${Date.now()}.pdf`;
+// const pdfDirectory = path.join(__dirname, 'pdfs');
+// const pdfFilePath = path.join(pdfDirectory, pdfFileName);
+// const outputFolder = path.join(__dirname, '../images/'); // Ensure correct path resolution
+
+
+// // Extract images from PDF
+// async function extractImagesFromPDF(pdfBuffer, outputFolder) {
+//   const pdfDoc = await PDFLib.PDFDocument.load(pdfBuffer);
+//   const imagePaths = [];
+
+//   for (let i = 0; i < pdfDoc.getPageCount(); i++) {
+//     const page = pdfDoc.getPage(i);
+//     const xObjects = page.node.Resources?.XObject?.getAll(); // Updated access to XObject
+
+//     if (xObjects) {
+//       for (const [key, value] of Object.entries(xObjects)) {
+//         const subtype = value.lookup('Subtype');
+//         if (subtype?.name === 'Image') {
+//           const imageBuffer = value.object.decode();
+//           const detectedImageType = await fromBuffer(imageBuffer);
+//           const extension = detectedImageType?.ext || 'png';
+//           const imagePath = path.join(outputFolder, `image_${i + 1}_${key}.${extension}`);
+//           fs.writeFileSync(imagePath, imageBuffer);
+//           imagePaths.push(imagePath);
+//         }
+//       }
+//     }
+//   }
+//   return imagePaths;
+// }
+
+// // Save image paths to the database
+// async function saveImagesToDB(imagePaths) {
+//   for (const imagePath of imagePaths) {
+//     const image = fs.readFileSync(imagePath);
+//     await Image.create({ imagePath, imageData: image });
+//     console.log('Image inserted into database');
+//   }
+// }
+
+// // const pdfFileName = `form_${Date.now()}.pdf`;
+// // const pdfDirectory = path.join(__dirname, 'pdfs');
+// // const pdfFilePath = path.join(pdfDirectory, pdfFileName);
+// // const outputFolder = path.join(__dirname, '../images/'); // Ensure correct path resolution
+
+// // Ensure the output folder exists
+// if (!fs.existsSync(outputFolder)) {
+//   fs.mkdirSync(outputFolder, { recursive: true });
+// }
+
+// // Main execution flow
+// (async () => {
+//   try {
+//     const pdfBuffer = fs.readFileSync(pdfFilePath); // Read the PDF file
+//     const imagePaths = await extractImagesFromPDF(pdfBuffer, outputFolder);
+//     await saveImagesToDB(imagePaths); // Save images to DB
+//   } catch (error) {
+//     console.error('Error processing PDF:', error);
+//   }
+// })();
+
+
+
+// Route to render login page
+app.get("/", async (req, res) => {
+  res.render("auth-login.ejs");
+});
 
 app.get("/ccm-form1", isAuthenticated, async (request, response) => {
   try {
@@ -318,38 +411,48 @@ app.get("/entry-details/:entryID", isAuthenticated,
   }
 );
 
-app.get("/entry-details-edit/:entryID", isAuthenticated,
-  async (request, response) => {
-    try {
-      const entryID = request.params.entryID;
-      const entryData = await CCMFormData.findByPk(entryID);
+app.get("/entry-details-edit/:entryID", isAuthenticated, async (request, response) => {
+  try {
+    const entryID = request.params.entryID;
 
-      console.log("\nentryData Values\n" + entryID);
-      console.log(entryData);
+    // Fetch the entry data by primary key (entryID)
+    const entryData = await CCMFormData.findByPk(entryID);
 
-      const CCMUserDataReq = await CCMUserData.findAll();
-      const CCMFormDataReq = await CCMFormData.findAll();
-      const userData = request.session.user; // Access user details directly from session
-
-      // Format the complaint date
-      const formattedComplaintDate = entryData.ComplaintDate
-        ? entryData.ComplaintDate.toLocaleDateString("en-CA")
-        : "";
-
-      response.render("entry-details-edit.ejs", {
-        CCMUserDataReq,
-        CCMFormDataReq,
-        userData,
-        entryData,
-        entryID,
-        formattedComplaintDate,
-      });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      response.status(500).send("Internal Server Error");
+    // Check if entryData exists
+    if (!entryData) {
+      console.error(`No entry found for entryID: ${entryID}`);
+      return response.status(404).send("Entry not found");
     }
+
+    console.log("\nentryData Values for entryID:", entryID);
+    console.log(entryData);
+
+    // Fetch additional data
+    const CCMUserDataReq = await CCMUserData.findAll();
+    const CCMFormDataReq = await CCMFormData.findAll();
+    const userData = request.session.user; // Access user details directly from session
+
+    // Safely format the complaint date if available
+    const formattedComplaintDate = entryData.ComplaintDate
+      ? entryData.ComplaintDate.toLocaleDateString("en-CA")
+      : "";
+
+    // Render the edit page with the required data
+    response.render("entry-details-edit.ejs", {
+      CCMUserDataReq,
+      CCMFormDataReq,
+      userData,
+      entryData,
+      entryID,
+      formattedComplaintDate,
+    });
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    response.status(500).send("Internal Server Error");
   }
-);
+});
+
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -431,6 +534,53 @@ app.post("/removeUser", isAuthenticatedAsAdmin, async (req, res) => {
 
 
 
+
+// // Import the ImagesTable from the database file
+// const { ImagesTable } = require('./database');
+
+// // Function to save the file path in the ImagesTable database
+// async function saveFilePathToDatabase(filePath, imageData = null) {
+//   try {
+//     // Create a new entry in the ImagesTable
+//     const newImageEntry = await ImagesTable.create({
+//       image_path: filePath,
+//       image_data: imageData, // Optional: store image data as BLOB
+//     });
+//     console.log('File path uploaded to database:', newImageEntry);
+//   } catch (error) {
+//     console.error('Error uploading file path:', error);
+//   }
+// }
+
+// Function to save the file path in the CCMFormData table
+async function saveFilePathToCCMFormData(filePath, PONumber) {
+  try {
+    // Debugging logs
+    console.log("File Path:", filePath);
+    console.log("PO Number:", PONumber);
+
+    // Ensure the file path is a valid string
+    if (!filePath || typeof filePath !== 'string') {
+      throw new Error('Invalid file path provided');
+    }
+
+    // Update the existing CCMFormData entry with the file path, using PONumber as a unique identifier
+    const updatedEntry = await CCMFormData.update(
+      { file_path: filePath },  // Update only the file_path field
+      { where: { PONumber: PONumber } } // Use PONumber to update the right record
+    );
+
+    // Check if the update was successful
+    if (updatedEntry[0] === 0) {
+      console.error('No record found to update with the given PO Number');
+    } else {
+      console.log('File path successfully uploaded to the database');
+    }
+  } catch (error) {
+    console.error('Error uploading file path:', error.message);
+  }
+}
+
 let lastSubmittedData = null;
 
 // Function to create the PDF
@@ -452,6 +602,7 @@ function createPDF(doc, data, outputPath) {
     ['Complaint Date', data.ComplaintDate],
     ['Nature of Complaint', data.NatureOfComplaint],
     ['Other Nature of Complaints', data.NatureOfComplaintOthers],
+    ['File Path', data.uploadFiles]
   ];
 
   // Function to draw the table
@@ -473,6 +624,27 @@ function createPDF(doc, data, outputPath) {
 
   // Finalize the PDF file
   doc.end();
+
+
+
+  // // Fetch the file path from the data object
+  // const filePath = data.uploadFiles;
+
+  // // Call the function to upload the file path to the database
+  // saveFilePathToDatabase(filePath);
+  // Fetch the file path from the data object
+  // Fetch the file path from the data object
+  // Fetch the file path from the data object
+  const filePath = data.uploadFiles;  // Ensure this contains the correct file path
+  const PONumber = data.PONumber;  // Use PONumber to identify the record
+
+  // Debugging logs
+  console.log("Saving file path:", filePath);
+  console.log("PO Number:", PONumber);
+
+  // Call the function to upload the file path to CCMFormData using PONumber
+  saveFilePathToCCMFormData(filePath, PONumber);
+  
 }
 
 // POST route to handle form submission
@@ -601,6 +773,28 @@ app.get('/download-pdf/:fileName', (req, res) => {
   const filePath = path.join(__dirname, 'pdfs', req.params.fileName);
   res.download(filePath);
 });
+
+// // Handle the file upload route
+// app.post('/upload', (req, res) => {
+//   upload(req, res, (err) => {
+//     if (err) {
+//       res.render('ccm-form.ejs', {
+//         msg: err
+//       });
+//     } else {
+//       if (req.file == undefined) {
+//         res.render('ccm-form1.ejs', {
+//           msg: 'No file selected!'
+//         });
+//       } else {
+//         res.render('ccm-form1.ejs', {
+//           msg: 'File uploaded successfully!',
+//           file: `uploads/${req.file.filename}`
+//         });
+//       }
+//     }
+//   });
+// });
 
 app.post("/edit-form/:entryID", isAuthenticated,
   upload.single("file"),
@@ -1008,19 +1202,16 @@ app.get("/getSelectedUsers", isAuthenticated, async (req, res) => {
   }
 });
 
-app.post(
-  "/acceptComplaintQA",
-  isAuthenticated,
-  (req, res, next) => {
-    if (
-      req.session.user.Designation === "Admin" ||
-      req.session.user.Designation === "QA Team"
-    ) {
-      next();
-    } else {
-      res.sendStatus(403); // Forbidden
-    }
-  },
+app.post("/acceptComplaintQA", isAuthenticated, (req, res, next) => {
+  if (
+    req.session.user.Designation === "Admin" ||
+    req.session.user.Designation === "QA Team"
+  ) {
+    next();
+  } else {
+    res.sendStatus(403); // Forbidden
+  }
+},
   async (req, res) => {
     const { id, status, selectedUsers } = req.query;
     const userData = req.session.user;
@@ -1161,4 +1352,3 @@ app.post(
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
 });
-

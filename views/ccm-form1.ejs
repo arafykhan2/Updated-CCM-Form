@@ -21,7 +21,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-image: url('img/alrahim.jpg');
+      background-image: url('img/alimage.jpg');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center center;
@@ -256,9 +256,10 @@
                         <input type="text" class="form-control" name="CustomerName" id="CustomerName" placeholder="Enter customer name" required>
                         <div class="invalid-feedback">Please enter customer name.</div>
                       </div>
+
                       <div class="form-group">
                         <label for="NatureOfComplaint[]">Select Nature(s) of Complaint</label>
-                        <select class="form-control select2" multiple name="NatureOfComplaint[]" id="NatureOfComplaint[]" required>
+                        <select class="form-control select2" multiple name="NatureOfComplaint[]" id="NatureOfComplaint[]"  onchange="toggleOtherField()" required="required">
                           <% CCMFieldsDataReq.forEach(function(item) { %>
                           <% if (item.NOCDropdown) { %>
                           <optgroup label="<%= item.NOCDropdown %>">
@@ -272,17 +273,20 @@
                           </optgroup>
                           <% } %>
                           <% }); %>
+                          <option value="Other" >Other</option> <!-- Add the "Other" option here -->
                         </select>
                       </div>
 
-                      <div class="form-group">
+                      <div class="form-group" id="otherNatureOfComplaintDiv" style="display:none;">
                         <label for="NatureOfComplaintOthers">Other Nature(s) of Complaints</label>
-                        <input type="text" placeholder="Add comma-separated values without space" class="form-control" name="NatureOfComplaintOthers" id="NatureOfComplaintOthers" multiple>
+                        <input type="text" placeholder="Add comma-separated values without space" class="form-control" name="NatureOfComplaintOthers" id="NatureOfComplaintOthers" >
                       </div>
+
                       <div class="form-group">
                         <label for="PONumber">PO#</label>
                         <input type="text" class="form-control" required="" name="PONumber" id="PONumber">
                       </div>
+
                       <div class="form-group">
                         <label for="SOSNumber">SOS#</label>
                         <input type="text" class="form-control" required="" name="SOSNumber" id="SOSNumber">
@@ -291,8 +295,8 @@
                       <div class="d-flex justify-content-end align-items-center mt-3">
                         <button type="button" onclick="nextStep('step1')" class="btn btn-primary">Next</button>
                       </div>
-
                     </div>
+
 
                     <!-- Step 2: Product Details -->
                     <div id="step2" class="form-section">
@@ -400,13 +404,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="d-flex justify-content-end align-items-center mt-3">
+
+                      <div class="d-flex justify-content-between align-items-center mt-3"><button type="button" onclick="changeStep('step2','back')" class="btn btn-primary ">Back</button>
+
                         <button type="button" onclick="nextStep('step2')" class="btn btn-primary ">Next</button>
+
                       </div>
+
                     </div>
 
                     <!-- Step 3: Complaint Details -->
-                     
+
                     <div id="step3" class="form-section">
                       <h2 class="mb-4">Complaint Details</h2>
 
@@ -431,10 +439,14 @@
                       </div>
 
                       <div class="d-flex justify-content-between align-items-center mt-3">
+                        <button type="button" id="backbtn" onclick="changeStep('step3','back')" class="btn btn-primary">Back</button>
                         <button type="submit" id="submitBtn" class="btn btn-success" onclick="validateForm()">Submit</button>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center mt-3">
                         <a href="/generate-pdf"><button type="button" id="downloadBtn" class="btn btn-success" disabled style="display: none;">Download Pdf</button></a>
                         <a href="/ccm-form1"><button type="button" id="ccmFoamBtn" class="btn btn-success" disabled style="display: none;">Go to CCM-FOAM</button></a>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -444,6 +456,18 @@
       </form>
     </section>
     <script>
+      function toggleOtherField() {
+        const natureOfComplaintSelect = document.getElementById('NatureOfComplaint[]');
+        const otherNatureOfComplaintDiv = document.getElementById('otherNatureOfComplaintDiv');
+
+        // Check if "Other" is selected
+        if (Array.from(natureOfComplaintSelect.options).some(option => option.selected && option.value === 'Other')) {
+          otherNatureOfComplaintDiv.style.display = 'block'; // Show the field
+        } else {
+          otherNatureOfComplaintDiv.style.display = 'none'; // Hide the field
+        }
+      }
+
       // Get references to the buttons
       const submitBtn = document.getElementById('submitBtn');
       const downloadBtn = document.getElementById('downloadBtn');
@@ -469,13 +493,14 @@
 
           // Optionally, hide the Submit button after it's clicked
           submitBtn.style.display = 'none';
+          backbtn.style.display = 'none'
         } else {
           // Show an alert if not all fields are filled
           alert('Please fill in all fields before submitting.');
         }
       }
     </script>
-    
+
     <!-- General JS Scripts -->
     <script src="js/app.min.js"></script>
     <script src="bundles/jquery-ui/jquery-ui.min.js"></script>
@@ -505,6 +530,63 @@
           }
         });
       });
+
+
+
+      function changeStep(currentStepId, direction) {
+        const currentSection = document.getElementById(currentStepId);
+        const sections = [...document.querySelectorAll('.form-section')];
+        const currentIndex = sections.indexOf(currentSection);
+
+        let nextIndex;
+        if (direction === 'next') {
+          nextIndex = currentIndex + 1;
+        } else if (direction === 'back') {
+          nextIndex = currentIndex - 1;
+        }
+
+        if (nextIndex >= 0 && nextIndex < sections.length) {
+          const nextSection = sections[nextIndex];
+
+          if (direction === 'next') {
+            const inputs = currentSection.querySelectorAll('input, textarea');
+            let valid = true;
+
+            inputs.forEach((input) => {
+              if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+                valid = false;
+              } else {
+                input.classList.remove('is-invalid');
+              }
+            });
+
+            if (!valid) return; // Stop if current step validation fails
+          }
+
+          currentSection.classList.remove('active');
+          nextSection.classList.add('active');
+
+          const stepItems = document.querySelectorAll('.step-item');
+
+          stepItems.forEach((item, index) => {
+            if (index <= nextIndex) {
+              item.classList.add('active');
+              item.querySelector('.step-icon').classList.add('step-icon-active');
+            } else {
+              item.classList.remove('active');
+              item.querySelector('.step-icon').classList.remove('step-icon-active');
+            }
+          });
+
+          if (direction === 'next' && stepItems[nextIndex]) {
+            stepItems[nextIndex].querySelector('.step-icon').classList.add('step-icon-active');
+          }
+        }
+      }
+
+
+
 
       function nextStep(currentStepId) {
         const currentSection = document.getElementById(currentStepId);
