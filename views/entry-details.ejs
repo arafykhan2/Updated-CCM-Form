@@ -397,7 +397,7 @@
 
                     <div class="form-group">
                       <label>Complaint Description</label>
-                      <textarea class="form-control" disabled><%= CCMFormDataReq[entryID-1].ComplaintDetails %></textarea>
+                      <input type="text" class="form-control" value="<%= CCMFormDataReq[entryID-1].ComplaintDetails %>" disabled>
                     </div>
 
                     <div class="form-group">
@@ -405,7 +405,17 @@
                       <input type="date" class="form-control" value="<%= formattedComplaintDate %>" disabled>
                     </div>
 
-
+                    <div class="form-group">
+                      <label>Upload respective files</label>
+                      <div class="custom-file">
+                        <input type="text" class="form-control"  value="<%= CCMFormDataReq[entryID-1].file_path %>" disabled>
+                        <!-- Provide a link to view/download the file -->
+                        <!-- <a id="viewFileLink" href="" class="btn btn-primary mt-2" target="_blank";">
+                          View File
+                        </a> -->
+                        <!-- <label class="custom-file-label" for="uploadFiles">Upload</label> -->
+                      </div>
+                    </div>
 
                     <!-- <div class="form-group">
                       <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
@@ -496,6 +506,34 @@
         }
       });
     });
+
+    document.getElementById('uploadFiles').addEventListener('change', function(event) {
+  const fileInput = event.target;
+  const formData = new FormData();
+  formData.append('uploadFiles', fileInput.files[0]);
+
+  // Make an AJAX request to upload the file
+  fetch('/uploads', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.filePath) {
+      // Update the file path display
+      document.getElementById('filePathDisplay').value = data.filePath;
+
+      // Update the view/download link and make it visible
+      const viewFileLink = document.getElementById('viewFileLink');
+      viewFileLink.href = '/uploads/' + data.filePath;
+      viewFileLink.style.display = 'inline';
+    }
+  })
+  .catch(error => {
+    console.error('Error uploading file:', error);
+  });
+});
+
   </script>
 
 </body>

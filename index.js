@@ -10,6 +10,7 @@ const PDFLib = require('pdf-lib');
 const { fromBuffer } = require('file-type');
 const mysql = require('mysql2');
 const { Sequelize } = require('sequelize');
+const puppeteer = require('puppeteer');
 // const Image = require('../models/Image'); // Import your database model
 
 const app = express();
@@ -48,6 +49,8 @@ function checkFileType(file, cb) {
     cb('Error: Images and PDFs Only!');
   }
 }
+
+
 
 
 // const dataUpload = require("./controllers/dataUpload")
@@ -534,6 +537,68 @@ app.post("/removeUser", isAuthenticatedAsAdmin, async (req, res) => {
 
 
 
+app.get('/generatePDF', (req, res) => {
+  res.render('template', {
+      customerData: {
+          customerName: "ARK",
+          poNumber: "12345690",
+          sosNumber: "111111111111",
+          brandName: "Threshold",
+          product: "Solid towel",
+          article: "Beach towel",
+          sizeValue: "12x12",
+          sizeUnit: "In",
+          color: "blue",
+          design: "black",
+          productId: "123456789123",
+          complaintDetails: "Product is fariq !!!",
+          complaintDate: "2024-10-17",
+          natureOfComplaint: "Measurement",
+          otherComplaints: "",
+          filePath: "1.jpg"
+          
+  
+      }
+  });
+});
+
+// Route to generate PDF (POST request)
+app.post('/generatePDF', async (req, res) => {
+  try {
+      // Launch Puppeteer browser
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+
+      // Load the EJS template as HTML
+      const content = await res.render('template', {
+          customerData: req.body
+      }, (err, html) => html);
+
+      // Set content in Puppeteer
+      await page.setContent(content, { waitUntil: 'networkidle0' });
+
+      // Generate PDF
+      const pdfBuffer = await page.pdf({
+          format: 'A4',
+          printBackground: true
+      });
+
+      // Close the browser
+      await browser.close();
+
+      // Send the PDF as a response
+      res.set({
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'pdfs; filename=customer_complaint_form.pdf',
+      });
+      res.send(pdfBuffer);
+
+  } catch (error) {
+      console.error("Error generating PDF: ", error);
+      res.status(500).send("Error generating PDF");
+  }
+});
+
 
 // // Import the ImagesTable from the database file
 // const { ImagesTable } = require('./database');
@@ -732,69 +797,73 @@ app.post('/submit-form', isAuthenticated, upload.single('uploadFiles'), async (r
   }
 });
 
-app.get('/generate-pdf', async (req, res) => {
-  try {
-    if (!lastSubmittedData) {
-      return res.status(400).json({ success: false, message: 'No form data available for PDF generation.' });
-    }
-
-    const pdfFileName = `form_${Date.now()}.pdf`;
-    const pdfDirectory = path.join(__dirname, 'pdfs');
-    const pdfFilePath = path.join(pdfDirectory, pdfFileName);
-
-    // Ensure the directory exists
-    if (!fs.existsSync(pdfDirectory)) {
-      fs.mkdirSync(pdfDirectory);
-    }
-
-    const doc = new PDFDocument();
-    const writeStream = fs.createWriteStream(pdfFilePath);
-    doc.pipe(writeStream);
-
-    // Create the PDF
-    createPDF(doc, lastSubmittedData, pdfFilePath);
-
-    // Once the PDF has been written, respond with the PDF as an inline view
-    writeStream.on('finish', () => {
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `inline; filename="${pdfFileName}"`);
-      fs.createReadStream(pdfFilePath).pipe(res);
-    });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error generating the PDF.' });
-  }
-});
 
 
-// Route to download the generated PDF
-app.get('/download-pdf/:fileName', (req, res) => {
-  const filePath = path.join(__dirname, 'pdfs', req.params.fileName);
-  res.download(filePath);
-});
 
-// // Handle the file upload route
-// app.post('/upload', (req, res) => {
-//   upload(req, res, (err) => {
-//     if (err) {
-//       res.render('ccm-form.ejs', {
-//         msg: err
-//       });
-//     } else {
-//       if (req.file == undefined) {
-//         res.render('ccm-form1.ejs', {
-//           msg: 'No file selected!'
-//         });
-//       } else {
-//         res.render('ccm-form1.ejs', {
-//           msg: 'File uploaded successfully!',
-//           file: `uploads/${req.file.filename}`
-//         });
-//       }
+
+// app.get('/generate-pdf', async (req, res) => {
+//   try {
+//     if (!lastSubmittedData) {
+//       return res.status(400).json({ success: false, message: 'No form data available for PDF generation.' });
 //     }
-//   });
+
+//     const pdfFileName = `form_${Date.now()}.pdf`;
+//     const pdfDirectory = path.join(__dirname, 'pdfs');
+//     const pdfFilePath = path.join(pdfDirectory, pdfFileName);
+
+//     // Ensure the directory exists
+//     if (!fs.existsSync(pdfDirectory)) {
+//       fs.mkdirSync(pdfDirectory);
+//     }
+
+//     const doc = new PDFDocument();
+//     const writeStream = fs.createWriteStream(pdfFilePath);
+//     doc.pipe(writeStream);
+
+//     // Create the PDF
+//     createPDF(doc, lastSubmittedData, pdfFilePath);
+
+//     // Once the PDF has been written, respond with the PDF as an inline view
+//     writeStream.on('finish', () => {
+//       res.setHeader('Content-Type', 'application/pdf');
+//       res.setHeader('Content-Disposition', `inline; filename="${pdfFileName}"`);
+//       fs.createReadStream(pdfFilePath).pipe(res);
+//     });
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, message: 'Error generating the PDF.' });
+//   }
 // });
+
+
+// // Route to download the generated PDF
+// app.get('/download-pdf/:fileName', (req, res) => {
+//   const filePath = path.join(__dirname, 'pdfs', req.params.fileName);
+//   res.download(filePath);
+// });
+
+// Handle the file upload route
+app.post('/uploads', (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.render('ccm-form1.ejs', {
+        msg: err
+      });
+    } else {
+      if (req.file == undefined) {
+        res.render('ccm-form1.ejs', {
+          msg: 'No file selected!'
+        });
+      } else {
+        res.render('ccm-form1.ejs', {
+          msg: 'File uploaded successfully!',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+});
 
 app.post("/edit-form/:entryID", isAuthenticated,
   upload.single("file"),

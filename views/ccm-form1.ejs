@@ -420,7 +420,7 @@
 
                       <div class="form-group">
                         <label for="complaint_details">Complaint Details</label>
-                        <textarea class="form-control" id="complaint_details" rows="6" placeholder="Enter complaint details" required></textarea>
+                        <input class="form-control" id="ComplaintDetails" name="ComplaintDetails"  placeholder="Enter complaint details" required>
                         <div class="invalid-feedback">Please enter complaint details.</div>
                       </div>
 
@@ -443,7 +443,7 @@
                         <button type="submit" id="submitBtn" class="btn btn-success" onclick="validateForm()">Submit</button>
                       </div>
                       <div class="d-flex justify-content-between align-items-center mt-3">
-                        <a href="/generate-pdf"><button type="button" id="downloadBtn" class="btn btn-success" disabled style="display: none;">Download Pdf</button></a>
+                        <a href="/generatePDF"><button type="button" id="downloadBtn" class="btn btn-success" disabled style="display: none;">Download Pdf</button></a>
                         <a href="/ccm-form1"><button type="button" id="ccmFoamBtn" class="btn btn-success" disabled style="display: none;">Go to CCM-FOAM</button></a>
                       </div>
 
@@ -474,7 +474,7 @@
       const ccmFoamBtn = document.getElementById('ccmFoamBtn');
 
       // Get references to the form fields
-      const complaintDetails = document.getElementById('complaint_details');
+      const complaintDetails = document.getElementById('ComplaintDetails');
       const complaintDate = document.getElementById('ComplaintDate');
       const uploadFiles = document.getElementById('uploadFiles');
 

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Complaint Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px auto;
+            width: 80%;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-info {
+            text-align: left;
+            line-height: 1.5;
+        }
+        .header-info div {
+            margin-bottom: 5px;
+        }
+        .header-table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .header-table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td:nth-child(2) {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">
+            ALRAHIM
+        </div>
+        <div class="header-table-wrapper">
+            <table class="header-table">
+                <tr>
+                    <td>DEPARTMENT:</td>
+                    <td>Sales & Marketing</td>
+                </tr>
+                <tr>
+                    <td>DOC. TITLE:</td>
+                    <td>Customer Complaint Form</td>
+                </tr>
+            </table>
+        </div>
+        <div class="header-info">
+            <div>Document No: ALR/CRMS/04/003</div>
+            <div>Issue Date: 25-Sept-2024</div>
+            <div>Revision No: 03</div>
+            <div>Revision Date: 03-03-0033</div>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Customer Name</td>
+            <td><%= customerData.customerName %></td>
+        </tr>
+        <tr>
+            <td>PO Number</td>
+            <td><%= customerData.poNumber %></td>
+        </tr>
+        <tr>
+            <td>SOS Number</td>
+            <td><%= customerData.sosNumber %></td>
+        </tr>
+        <tr>
+            <td>Brand Name</td>
+            <td><%= customerData.brandName %></td>
+        </tr>
+        <tr>
+            <td>Product</td>
+            <td><%= customerData.product %></td>
+        </tr>
+        <tr>
+            <td>Article</td>
+            <td><%= customerData.article %></td>
+        </tr>
+        <tr>
+            <td>Size Value</td>
+            <td><%= customerData.sizeValue %></td>
+        </tr>
+        <tr>
+            <td>Size Unit</td>
+            <td><%= customerData.sizeUnit %></td>
+        </tr>
+        <tr>
+            <td>Color</td>
+            <td><%= customerData.color %></td>
+        </tr>
+        <tr>
+            <td>Design</td>
+            <td><%= customerData.design %></td>
+        </tr>
+        <tr>
+            <td>Product ID</td>
+            <td><%= customerData.productId %></td>
+        </tr>
+        <tr>
+            <td>Complaint Details</td>
+            <td><%= customerData.complaintDetails %></td>
+        </tr>
+        <tr>
+            <td>Complaint Date</td>
+            <td><%= customerData.complaintDate %></td>
+        </tr>
+        <tr>
+            <td>Nature of Complaint</td>
+            <td><%= customerData.natureOfComplaint %></td>
+        </tr>
+        <tr>
+            <td>Other Nature of Complaints</td>
+            <td><%= customerData.otherComplaints %></td>
+        </tr>
+        <tr>
+            <td>File Path</td>
+            <td><%= customerData.filePath %></td>
+        </tr>
+    </table>
+
+</body>
+</html>

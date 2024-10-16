@@ -188,10 +188,10 @@
                     
                     <div class="selectgroup selectgroup-pills">
 
-                      <label class="selectgroup-item">
+                      <!-- <label class="selectgroup-item">
                         <input type="checkbox" id="toggleAuthor" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Author</span>
-                      </label>
+                      </label> -->
                       <label class="selectgroup-item">
                         <input type="checkbox" id="toggleCustomerName" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Customer Name</span>
@@ -220,7 +220,7 @@
 
                     <tr>
                       <th>#</th>
-                      <th data-column="author">Author</th>
+                      <!-- <th data-column="author">Author</th> -->
                       <th data-column="customerName">Customer Name</th>
                       <th data-column="createdAt">Created At</th>
                       <th data-column="qaStatus">QA Status</th>
@@ -246,26 +246,26 @@
                         <p><strong>Email:</strong> <span id="userEmail"></span></p>
                         <p><strong>Contact:</strong> <span id="userContact"></span></p>
                       </div>
-                      <!-- <td><%= CCMFormDataReq[i].CustomerName %> -->
-                        <!-- <div class="table-links">
-                           <a href="/entry-details/<%= i + 1 %>">View</a> -->
+                      <td><%= CCMFormDataReq[i].CustomerName %> 
+                         <div class="table-links">
+                           <a href="/entry-details/<%= i + 1 %>">View</a> 
 
-                          <!-- <div class="bullet"></div>
+                          <div class="bullet"></div>
                           <a href="#" onclick="showPopupDesc('<%= CCMFormDataReq[i].ComplaintDetails %>'); return false;">View Desc.</a>
 
                           <div id="userPopupDesc" class="arkham-popup">
                             <span class="close" onclick="closePopupDesc()">&times;</span>
                             <p><strong>Description:</strong></p>
                             <p><span id="Description"></span></p>
-                          </div> --> 
+                          </div> 
 
-                          <!-- <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
+                           <% if (CCMFormDataReq[i].ComplaintApprovedQMS === null) { %>
                           <div class="bullet"></div>
                           <a href="/entry-details-edit/<%= i + 1 %>">Edit</a>
                           <% } %>
 
                         </div>
-                      </td> -->
+                      </td> 
                       <!-- ComplaintDate.toLocaleDateString('en-CA') below -->
 
                       <td><%= CCMFormDataReq[i].ComplaintDate %></td>

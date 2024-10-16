@@ -185,10 +185,10 @@
                   <table class="table table-striped">
 
                     <div class="selectgroup selectgroup-pills">
-                      <label class="selectgroup-item">
+                      <!-- <label class="selectgroup-item">
                         <input type="checkbox" id="toggleAuthor" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Author</span>
-                      </label>
+                      </label> -->
                       <label class="selectgroup-item">
                         <input type="checkbox" id="toggleCustomerName" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Customer Name</span>
@@ -201,10 +201,10 @@
                         <input type="checkbox" id="toggleQAStatus" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Your Status</span>
                       </label>
-                      <label class="selectgroup-item">
+                      <!-- <label class="selectgroup-item">
                         <input type="checkbox" id="toggleQASuggestion" class="selectgroup-input" checked>
                         <span class="selectgroup-button">Your Suggestion</span>
-                      </label>
+                      </label> -->
                       <label class="selectgroup-item">
                         <input type="checkbox" id="toggleQMSStatus" class="selectgroup-input" checked>
                         <span class="selectgroup-button">QMS Status</span>
@@ -216,11 +216,11 @@
                     </div>
                     <tr>
                       <th>#</th>
-                      <th data-column="author">Author</th>
+                      <!-- <th data-column="author">Author</th> -->
                       <th data-column="customerName">Customer Name</th>
                       <th data-column="createdAt">Created At</th>
                       <th data-column="qaStatus">Your Status</th>
-                      <th data-column="qaSuggestion">Your Suggestion</th>
+                      <!-- <th data-column="qaSuggestion">Your Suggestion</th> -->
                       <th data-column="qmsStatus">QMS Status</th>
                       <th data-column="qmsSuggestion">QMS Suggestion</th>
                     </tr>
@@ -287,7 +287,7 @@
                         <% } %>
                       </td>
 
-                      <td>
+                      <!-- <td>
                         <% if (CCMFormDataReq[i].ComplaintSuggestionQA === null) { %>
                         <a href="#" class="btn btn-primary" onclick="showJustificationPopup()">Add Just.</a>
                         <% } else { %>
@@ -296,7 +296,7 @@
                         <a href="#" class="btn btn-primary" onclick="showJustificationPopupEdit('<%= CCMFormDataReq[i].ComplaintSuggestionQA %>')">Edit Just.</a>
                         <% } %>
 
-                      </td>
+                      </td> -->
                       <div id="popup" class="arkham-popup">
                         <span class="close" onclick="closeJustificationPopup()">&times;</span>
                         <textarea id="popup-textarea" class="form-control"></textarea>

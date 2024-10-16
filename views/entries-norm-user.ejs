@@ -189,13 +189,13 @@
                   <table class="table table-striped">
                     <tr>
                       <th>#</th>
-                      <th>Author</th>
+                      <!-- <th>Author</th> -->
                       <th>Customer Name</th>
                       <th>Product</th>
                       <th>Created At</th>
                       <th>Status</th>
                       <th>QA Suggestions</th>
-                      <th>Prod. Justification</th>
+                      <!-- <th>Prod. Justification</th> -->
                     </tr>
 
                     <% for (let i=0; i < CCMFormDataReq.length; i++) { %>
@@ -253,7 +253,7 @@
                         <% } %>
                       </td>
 
-                      <td>
+                      <!-- <td>
                         <% if (CCMFormDataReq[i].JustificationProd === null) { %>
                         <a href="#" class="btn btn-primary" onclick="showJustificationPopup()">Add Just.</a>
                         <% } else { %>
@@ -262,7 +262,7 @@
                         <a href="#" class="btn btn-primary" onclick="showJustificationPopupEdit('<%= CCMFormDataReq[i].JustificationProd %>')">Edit Just.</a>
                         <% } %>
 
-                      </td>
+                      </td> -->
 
                       <div id="popup" class="arkham-popup">
                         <span class="close" onclick="closeJustificationPopup()">&times;</span>
